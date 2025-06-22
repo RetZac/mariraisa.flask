@@ -1,0 +1,101 @@
+<div id="modalEditProduto" class="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); align-items:center; justify-content:center; z-index:1000;">
+  <div class="modal-content" style="background:#fff; border-radius:12px; padding:24px; max-width:550px; width:100%; position:relative;">
+    <button class="close-btn" type="button" onclick="fecharModalEdit()" style="position:absolute; top:12px; right:12px; font-size:1.5rem; background:none; border:none; cursor:pointer;">&times;</button>
+    <h2 style="text-align:center;">Editar Produto</h2>
+
+    <form id="formEditProduto" method="POST" enctype="multipart/form-data" style="display:flex; flex-direction:column; gap:12px;">
+      <input type="hidden" id="edit_produto_id" name="produto_id">
+
+      <label>Código</label>
+      <input type="text" id="edit_codigo" name="codigo" required>
+
+      <label>Nome</label>
+      <input type="text" id="edit_nome" name="nome" required>
+
+      <label>Descrição Curta</label>
+      <textarea id="edit_descricao_curta" name="descricao_curta" required></textarea>
+
+      <label>Descrição Detalhada</label>
+      <textarea id="edit_descricao" name="descricao"></textarea>
+
+      <div style="display:flex; gap:12px;">
+        <div style="flex:1;">
+          <label>Preço à Vista</label>
+          <input type="number" step="0.01" id="edit_preco_par" name="preco_par" required>
+        </div>
+        <div style="flex:1;">
+          <label>Preço Parcelado</label>
+          <input type="number" step="0.01" id="edit_preco_parcelado" name="preco_parcelado" required>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:12px;">
+        <div style="flex:1;">
+          <label>Qtd por Caixa</label>
+          <input type="number" id="edit_qtd_minima" name="qtd_minima" required>
+        </div>
+        <div style="flex:1;">
+          <label>Categoria</label>
+          <select id="edit_categoria" name="categoria_id" required>
+            {% for cat in categorias %}
+              <option value="{{ cat.id }}">{{ cat.nome }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+    <label for="tipo_salto">Tipo de Salto:</label>
+<select id="edit_tipo_salto" name="tipo_salto" required class="form-control">
+  <option value="">Selecione</option>
+  <option>Rasteira</option>
+  <option>Salto Mini (1cm)</option>
+  <option>Salto Baixo Fino (5cm)</option>
+  <option>Salto Baixo Bloco (5cm)</option>
+  <option>Salto Médio Fino (6,7cm)</option>
+  <option>Salto Médio Bloco (6,7cm)</option>
+  <option>Salto Alto Fino (8,9cm)</option>
+  <option>Salto Alto Bloco (8,9cm)</option>
+  <option>Sem Salto</option>
+</select>
+
+<div class="form-group">
+<label for="colecao">Coleção:</label>
+<select name="colecao_id" id="edit_colecao" class="form-control">
+  <option value="">Selecione</option>
+  {% for colecao in colecoes_ativas %}
+    <option value="{{ colecao.id }}" {% if produto and produto.colecao_id == colecao.id %}selected{% endif %}>
+      {{ colecao.nome }}
+    </option>
+  {% endfor %}
+</select>
+</div>
+
+
+      <!-- Cores com Imagens -->
+      <label>Cores e Imagens:</label>
+      <div id="edit-cores-container">
+        <!-- As linhas com cor + imagem serão preenchidas via JS -->
+      </div>
+      <button type="button" onclick="adicionarCorEdit()" class="btn btn-sm" style="margin-bottom:12px;">+ Adicionar Cor</button>
+
+      <label>Foto Atual:</label>
+      <img id="imgFotoAtual" src="" style="max-width:100px; display:none;">
+
+      <label>Nova Foto Principal</label>
+      <input type="file" name="foto" accept="image/*">
+
+
+
+
+      <label>Fotos Extras</label>
+      <input type="file" name="fotos" multiple accept="image/*">
+
+      <div id="galeriaExtras" style="margin-top: 16px;">
+        <label style="font-weight: 600;">Fotos Extras (atuais):</label>
+        <div id="galeriaExtrasContainer" style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px;"></div>
+      </div>
+
+      <button type="submit" class="btn btn-success">Salvar Alterações</button>
+    </form>
+  </div>
+</div>

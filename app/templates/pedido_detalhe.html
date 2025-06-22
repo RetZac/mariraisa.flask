@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block title %}Pedido #{{ pedido.id }} - Maria Raisa{% endblock %}
+
+{% block content %}
+<section style="max-width: 700px; margin: 44px auto 0 auto; background: #fff; border-radius: 14px; box-shadow: 0 4px 24px rgba(60,60,60,0.08); padding: 32px 22px 34px 22px;">
+  <h2 style="font-family:'Montserrat',sans-serif;font-size:1.6rem;font-weight:900;color:#111;margin-bottom:12px;">
+    Pedido #{{ pedido.id }}
+  </h2>
+
+  <div style="margin-bottom: 8px; color:#888;">
+    <b>Data:</b> {{ pedido.data.strftime('%d/%m/%Y') }}<br>
+    <b>Status:</b>
+    {% set cor_status = '#333' %}
+    {% if pedido.status == 'Pago' %}
+      {% set cor_status = '#28a745' %}
+    {% elif pedido.status == 'Aguardando pagamento' %}
+      {% set cor_status = '#c0392b' %}
+    {% elif pedido.status == 'Em produção' %}
+      {% set cor_status = '#f7b731' %}
+    {% elif pedido.status == 'Pronto para envio' %}
+      {% set cor_status = '#111' %}
+    {% elif pedido.status == 'Enviado' %}
+      {% set cor_status = '#3fa996' %}
+    {% elif pedido.status == 'Cancelado' %}
+      {% set cor_status = '#a31a1a' %}
+    {% endif %}
+    <span style="font-weight:700; color:{{ cor_status }};">
+      {{ pedido.status or '---' }}
+    </span>
+    <br>
+    <b>Nota Fiscal:</b>
+    {% if pedido.nf_emitida %}
+      <span style="color:#28a745;">Emitida (NF: {{ pedido.numero_nf or '---' }})</span>
+    {% else %}
+      <span style="color:#c0392b;">Não emitida</span>
+    {% endif %}
+  </div>
+
+  <hr style="margin:18px 0 18px 0; border: none; border-top: 1px solid #eee;">
+
+  <div>
+    <table style="width:100%;border-collapse:collapse;font-size:1.04rem;">
+      <thead>
+        <tr style="background:#fafafa;">
+          <th style="padding:8px 6px;text-align:left;color:#222;">Produto</th>
+          <th style="padding:8px 6px;text-align:left;color:#222;">Tamanho</th>
+          <th style="padding:8px 6px;text-align:left;color:#222;">Qtd</th>
+          <th style="padding:8px 6px;text-align:left;color:#222;">Preço</th>
+          <th style="padding:8px 6px;text-align:left;color:#222;">Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in pedido.itens %}
+        <tr style="border-bottom:1px solid #f4f4f4;">
+          <td style="padding:10px 6px;">{{ item.nome_produto or 'Produto' }}</td>
+          <td style="padding:10px 6px;">{{ item.tamanho or '-' }}</td>
+          <td style="padding:10px 6px;">{{ item.quantidade or 1 }}</td>
+          <td style="padding:10px 6px;">R$ {{ "%.2f"|format(item.preco_unitario or 0) }}</td>
+          <td style="padding:10px 6px;">R$ {{ "%.2f"|format(item.preco_total or 0) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div style="text-align:right; margin-top: 18px;">
+    <span style="font-weight:700;font-size:1.13em;">Total do Pedido:</span>
+    <span style="font-weight:900;font-size:1.25em;color:#111;margin-left:12px;">
+      R$ {{ "%.2f"|format(pedido.total or 0) }}
+    </span>
+
+    {% if pedido.frete_transportadora %}
+      <p><strong>Frete:</strong> {{ pedido.frete_transportadora }} –
+        R$ {{ '%.2f'|format(pedido.frete_valor or 0) }}
+        {% if pedido.frete_prazo %}
+          <small>({{ pedido.frete_prazo }})</small>
+        {% endif %}
+      </p>
+    {% endif %}
+  </div>
+
+  <div style="margin-top:32px; display:flex;justify-content:space-between;gap:18px;">
+    <a href="{{ url_for('routes.pedidos_cliente') }}" class="btn btn-sm">Voltar aos Pedidos</a>
+    {% if pedido.nf_emitida %}
+      <a href="{{ url_for('routes.pedido_pdf', pedido_id=pedido.id) }}" class="btn btn-sm" target="_blank">Ver PDF do Pedido</a>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

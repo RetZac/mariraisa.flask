@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+{% block title %}Painel Administrativo | Maria Raisa{% endblock %}
+
+{% block content %}
+<div class="admin-dashboard-wrapper">
+  <div class="admin-dashboard">
+
+    <!-- Cartões de resumo -->
+    <div class="dashboard-cards">
+      <div class="card">
+        <a href="{{ url_for('routes.admin_categorias') }}" class="btn">Categorias</a>
+        <span>Produtos cadastrados</span>
+        <strong>{{ produtos|length }}</strong>
+      </div>
+      <div class="card">
+        <a href="{{ url_for('routes.admin_colecoes') }}" class="btn">Coleções</a>
+        <span>Total de Coleções</span>
+        <strong>{{ colecoes_ativas|length }}</strong>
+      </div>
+      <div class="card">
+  <a href="{{ url_for('routes.admin_banners') }}" class="btn">Banners</a>
+  <span>Total de Banners</span>
+  <strong>{{ banners|length }}</strong>
+</div>
+      <div class="card">
+        <a href="{{ url_for('routes.admin_clientes') }}" class="btn">Clientes</a>
+        <span>Total de Clientes</span>
+        <strong>{{ total_clientes }}</strong>
+      </div>
+      <div class="card">
+        <a href="{{ url_for('routes.admin_pedidos') }}" class="btn">Pedidos</a>
+        <span>Pedidos realizados</span>
+        <strong>{{ total_pedidos }}</strong>
+      </div>
+    </div>
+
+    <!-- Botão de Adicionar Produto -->
+    <div style="display:flex; justify-content:flex-end; margin-bottom:18px;">
+      <button id="btnAddProduto" class="btn-add">+ Adicionar Produto</button>
+    </div>
+
+    <!-- Tabela de Produtos -->
+    <table>
+      <thead>
+        <tr>
+          <th>Fotos</th>
+          <th>Código</th>
+          <th>Nome</th>
+          <th>Preço à vista (par)</th>
+          <th>Preço parcelado (par)</th>
+          <th>Qtd (par)</th>
+          <th>Total</th>
+          <th>Tamanhos</th>
+          <th>Destaque</th>
+          <th>Coleção</th>
+          <th>Ativo</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for produto in produtos %}
+        <tr
+          data-id="{{ produto.id }}"
+          data-codigo="{{ produto.codigo }}"
+          data-nome="{{ produto.nome }}"
+          data-descricao-curta="{{ produto.descricao_curta }}"
+          data-descricao="{{ produto.descricao }}"
+          data-preco-par="{{ produto.preco_par }}"
+          data-preco-parcelado="{{ produto.preco_parcelado }}"
+          data-qtd-minima="{{ produto.qtd_minima }}"
+          data-categoria-id="{{ produto.categoria_id }}"
+          data-foto="{{ produto.imagem_principal }}"
+          data-cores='{{ produto.cores_imagens | tojson }}'
+          data-tipo-salto="{{ produto.tipo_salto }}"
+          data-colecao-id="{{ produto.colecao_id }}"
+        >
+          <td>
+            {% if produto.imagem_principal %}
+              <img src="{{ url_for('static', filename='images/' ~ produto.imagem_principal) }}" alt="{{ produto.nome }}" class="produto-img-galeria" />
+            {% else %}—{% endif %}
+          </td>
+          <td>{{ produto.codigo }}</td>
+          <td>{{ produto.nome }}</td>
+          <td>R$ {{ '%.2f'|format(produto.preco_par) }}</td>
+          <td>R$ {{ '%.2f'|format(produto.preco_parcelado) }}</td>
+          <td>{{ produto.qtd_minima }}</td>
+          <td>R$ {{ '%.2f'|format(produto.preco_par * produto.qtd_minima) }}</td>
+          <td>{% for t,q in produto.grade.items() %}{{ t }}({{ q }}){% if not loop.last %}, {% endif %}{% endfor %}</td>
+          <td style="text-align:center;">
+            <span class="estrela-destaque" data-id="{{ produto.id }}" style="cursor:pointer; font-size:1.4rem; color:{{ 'gold' if produto.destaque else '#bbb' }};">&#9733;</span>
+          </td>
+          <td>{% if produto.colecao %}{{ produto.colecao.nome }}{% else %}—{% endif %}</td>
+          <td style="text-align:center;">{{ 'Sim' if produto.ativo else 'Não' }}</td>
+          <td>
+            <a href="{{ url_for('routes.produto_detail', produto_id=produto.id) }}" class="btn btn-sm btn-success">Ver</a>
+            <button type="button" class="btn btn-sm btn-warning btn-edit-produto">Editar</button>
+            <form action="{{ url_for('routes.excluir_produto', produto_id=produto.id) }}" method="post" style="display:inline-block" onsubmit="return confirm('Confirmar exclusão?');">
+              <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
+            </form>
+            <form action="{{ url_for('routes.toggle_produto', produto_id=produto.id) }}" method="post" style="display:inline;">
+              {% if produto.ativo %}
+                <button type="submit" class="btn btn-outline-warning" title="Desativar">Desativar</button>
+              {% else %}
+                <button type="submit" class="btn btn-outline-success" title="Ativar">Ativar</button>
+              {% endif %}
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modais -->
+  {% include 'admin/modais/modal_add_produto.html' %}
+  {% include 'admin/modais/modal_edit_produto.html' %}
+
+  <!-- Scripts -->
+  {% include 'admin/scripts/script_modal_add.html' %}
+  {% include 'admin/scripts/script_modal_edit.html' %}
+  {% include 'admin/scripts/script_carregar_imagens_extras.html' %}
+  {% include 'admin/scripts/script_destaque.html' %}
+</div>
+{% endblock %}

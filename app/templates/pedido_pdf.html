@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Pedido</title>
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; }
+    h2 { color: #222; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #888; padding: 8px; text-align: center; }
+    th { background: #f3f3f3; }
+  </style>
+</head>
+<body>
+  <h2>Resumo do Pedido</h2>
+  <p>Nome do cliente: {{ cliente_nome }}</p>
+  <p>Telefone: {{ cliente_telefone }}</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Produto</th>
+        <th>Qtd. Caixas</th>
+        <th>Preço por Par</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in carrinho %}
+      <tr>
+        <td>{{ item.nome }}</td>
+        <td>{{ item.qtd_caixas }}</td>
+        <td>R$ {{ "%.2f"|format(item.preco_par) }}</td>
+        <td>R$ {{ "%.2f"|format(item.preco_par * 12 * item.qtd_caixas) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <h3>Total do Pedido: R$ {{ "%.2f"|format(total_pedido) }}</h3>
+</body>
+</html>

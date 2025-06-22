@@ -1,0 +1,248 @@
+/* ===== TÍTULO ===== */
+.carrinho-titulo {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #3b2212;
+  margin: 60px 0 24px 0;
+  text-align: center;
+}
+.carrinho-icon {
+  font-size: 42px;
+  vertical-align: middle;
+  margin-right: 8px;
+  color: #bfa383;
+}
+
+/* ===== CARRINHO DE COMPRAS ===== */
+.carrinho-wrapper {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 40px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.carrinho-tabela {
+  flex: 1 1 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.carrinho-tabela table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+  font-family: 'Montserrat', sans-serif;
+}
+
+thead th {
+  background: #f5f5f5;
+  padding: 14px 12px;
+  font-weight: 700;
+  text-align: left;
+  border-bottom: 2px solid #000;
+}
+thead th:first-child {
+  border-top-left-radius: 12px;
+}
+thead th:last-child {
+  border-top-right-radius: 12px;
+}
+
+tbody td {
+  padding: 14px 12px;
+  border-bottom: 1px solid #eee;
+  vertical-align: middle;
+}
+
+tbody tr:hover {
+  background: #fafafa;
+}
+
+.produto-img-cor {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.cor-etiqueta {
+  background: #f5f5f5;
+  color: #3b2212;
+  padding: 6px 10px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.valor-total-item {
+  font-weight: bold;
+  color: #000000;
+}
+
+.carrinho-tabela .acoes-carrinho {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.btn-acao {
+  background: #000000;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.btn-acao:hover {
+  background: #222222;
+}
+
+/* ===== LINHA INFERIOR ===== */
+.carrinho-linha-inferior {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-top: 32px;
+  flex: 1 1 100%;
+}
+
+.carrinho-linha-inferior .card-box {
+  flex: 1 1 300px;
+  min-width: 280px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-box h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 14px;
+  color: #3b2212;
+}
+
+.card-box input[type="text"],
+.card-box input[type="radio"],
+.card-box button {
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 6px;
+}
+
+.card-box input[type="radio"] {
+  width: auto;
+  margin-right: 6px;
+}
+
+.card-box button {
+  background: #000000;
+  color: #fff;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  margin-top: 12px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.card-box button:hover {
+  background: #222222;
+}
+
+.resumo-box {
+  background: #fff;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+  margin-top: 20px;
+}
+.resumo-box p {
+  font-size: 1rem;
+  color: #000000;
+}
+
+.finalizar-btn {
+  margin-top: 16px;
+  background: #000000;
+  color: #fff;
+  padding: 12px;
+  text-align: center;
+  font-weight: 700;
+  border-radius: 8px;
+  border: none;
+  text-decoration: none;
+  display: inline-block;
+  transition: background 0.2s ease;
+}
+.finalizar-btn:hover {
+  background: #222222;
+}
+
+/* ===== CARRINHO VAZIO ===== */
+.carrinho-container {
+  max-width: 400px;
+  margin: 80px auto 60px auto;
+  padding: 32px 26px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 6px 28px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.carrinho-container .carrinho-icon {
+  font-size: 46px;
+  margin-bottom: 16px;
+  color: #bfa383;
+}
+
+.carrinho-container h1 {
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: #3b2212;
+  margin-bottom: 12px;
+}
+
+.carrinho-container p {
+  font-size: 1rem;
+  color: #000000;
+  margin-bottom: 20px;
+}
+
+.carrinho-container .btn-voltar {
+  padding: 10px 20px;
+  background: #000000;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+.carrinho-container .btn-voltar:hover {
+  background: #222222;
+}
+
+/* ===== MOBILE ===== */
+@media(max-width: 768px) {
+  .carrinho-wrapper,
+  .carrinho-linha-inferior {
+    flex-direction: column;
+  }
+
+  .carrinho-tabela,
+  .carrinho-linha-inferior .card-box {
+    width: 100%;
+  }
+}

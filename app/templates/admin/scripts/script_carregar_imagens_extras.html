@@ -1,0 +1,56 @@
+<script>
+function carregarImagensExtras(produtoId) {
+  fetch(`/admin/produto/${produtoId}/imagens_extras`)
+    .then(res => res.json())
+    .then(imagens => {
+      const container = document.getElementById('galeriaExtrasContainer');
+      container.innerHTML = '';
+
+      imagens.forEach(img => {
+        const wrapper = document.createElement('div');
+        wrapper.classList.add('foto-extra-box');
+        wrapper.style.position = 'relative';
+
+        const imagem = document.createElement('img');
+        imagem.src = img.url;
+        imagem.style.width = '60px';
+        imagem.style.height = '60px';
+        imagem.style.objectFit = 'cover';
+        imagem.style.borderRadius = '6px';
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.innerHTML = '&times;';
+        btn.dataset.imgId = img.id;
+        btn.style = `
+          background:black; color:white; border:none; font-size:0.8rem;
+          padding:2px 6px; border-radius:50%; cursor:pointer;
+          position:absolute; top:-6px; right:-6px;
+        `;
+
+        btn.onclick = () => {
+          if (confirm('Remover esta imagem?')) {
+            fetch(`/admin/produto/${produtoId}/excluir_imagem/${img.id}`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+              }
+            })
+            .then(response => {
+              if (response.ok) {
+                wrapper.remove(); // remove do DOM
+              } else {
+                alert('Erro ao remover imagem.');
+              }
+            });
+          }
+        };
+
+        wrapper.appendChild(imagem);
+        wrapper.appendChild(btn);
+        container.appendChild(wrapper);
+      });
+    });
+}
+</script>

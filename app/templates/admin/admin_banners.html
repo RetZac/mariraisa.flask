@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block title %}Banners da Home | Painel Admin{% endblock %}
+
+{% block content %}
+<div class="admin-content" style="max-width: 1100px; margin: 40px auto 80px auto;">
+  <h2 style="text-align:center; font-family: 'Playfair Display', serif; font-size:2.1rem; margin-bottom:38px;">
+    Banners da Home
+  </h2>
+  <div style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
+    <a href="javascript:void(0);" id="btnAddBanner" class="btn" style="background:#222; color:#fff; border-radius:6px; padding:8px 22px;">
+      + Adicionar Banner
+    </a>
+  </div>
+  <div class="table-responsive" style="background: #fff; border-radius: 16px; box-shadow: 0 1px 8px #0001;">
+    <table class="admin-table" style="width:100%; border-collapse:collapse;">
+      <thead>
+        <tr style="background:#f9f9f9;">
+          <th style="padding:14px 8px;">ID</th>
+          <th style="padding:14px 8px;">Imagem</th>
+          <th style="padding:14px 8px;">Título</th>
+          <th style="padding:14px 8px;">Ordem</th>
+          <th style="padding:14px 8px;">Ativo</th>
+          <th style="padding:14px 8px;">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for banner in banners %}
+        <tr>
+          <td style="padding:12px 8px;">{{ banner.id }}</td>
+          <td style="padding:12px 8px;">
+            <img src="{{ url_for('static', filename='banners/' + banner.imagem) }}" alt="Banner" style="width:90px; border-radius:6px;">
+          </td>
+          <td style="padding:12px 8px;">{{ banner.titulo }}</td>
+          <td style="padding:12px 8px;">{{ banner.ordem }}</td>
+          <td style="padding:12px 8px;">
+            {% if banner.ativo %}
+              <span style="color:#fff; background:#009e56; border-radius:14px; padding:3px 16px;">Sim</span>
+            {% else %}
+              <span style="color:#fff; background:#e4003a; border-radius:14px; padding:3px 16px;">Não</span>
+            {% endif %}
+          </td>
+          <td style="padding:12px 8px;">
+            <a href="javascript:void(0);" class="btn btnEditBanner"
+              data-id="{{ banner.id }}"
+              data-titulo="{{ banner.titulo }}"
+              data-ordem="{{ banner.ordem }}"
+              data-ativo="{{ 1 if banner.ativo else 0 }}"
+              data-imagem="{{ banner.imagem }}"
+              style="background:#009e56; color:#fff; margin-right:7px; font-size:0.97rem;">
+              Editar
+            </a>
+            <form method="POST" action="{{ url_for('routes.delete_banner', id=banner.id) }}" style="display:inline;">
+              <button type="submit" class="btn" style="background:#e4003a; color:#fff; font-size:0.97rem;" onclick="return confirm('Deseja remover este banner?');">
+                Excluir
+              </button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="6" style="text-align:center; color:#777; padding:40px 0;">Nenhum banner cadastrado ainda.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modais -->
+{% include 'admin/modais/modal_add_banner.html' %}
+{% include 'admin/modais/modal_edit_banner.html' %}
+
+{% endblock %}
+
+{% block head %}
+<!-- Inclua qualquer CSS adicional para os modais aqui -->
+{% endblock %}
+
+{% block scripts %}
+{% include 'admin/scripts/script_modal_add_banner.html' %}
+{% include 'admin/scripts/script_modal_edit_banner.html' %}
+{% endblock %}

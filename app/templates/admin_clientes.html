@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Clientes - Admin | Maria Raisa{% endblock %}
+
+{% block content %}
+<section style="max-width: 1100px; margin: 38px auto 0 auto; background: #fff; border-radius: 18px; box-shadow: 0 4px 28px rgba(60,60,60,0.09); padding: 32px 16px 38px 16px;">
+  <h1 style="font-family:'Montserrat',sans-serif;font-size:1.7rem;font-weight:900;color:#111;margin-bottom:22px;text-align:center;">
+    Clientes
+  </h1>
+
+  <form method="get" action="{{ url_for('routes.admin_clientes') }}" style="max-width:400px;margin:0 auto 22px auto;display:flex;gap:9px;">
+    <input type="text" name="busca" placeholder="Buscar por nome, email ou CPF/CNPJ" value="{{ request.args.get('busca', '') }}" style="padding:7px 13px;font-size:1rem;border-radius:7px;border:1.2px solid #e0e0e0;flex:1;">
+    <button type="submit" class="btn btn-sm">Buscar</button>
+  </form>
+
+  <table style="width:100%;border-collapse:collapse;font-size:1.03rem;">
+    <thead>
+      <tr style="background:#fafafa;">
+        <th style="padding:11px 7px;text-align:left;color:#222;">ID</th>
+        <th style="padding:11px 7px;text-align:left;color:#222;">Nome</th>
+        <th style="padding:11px 7px;text-align:left;color:#222;">Email</th>
+        <th style="padding:11px 7px;text-align:left;color:#222;">CPF/CNPJ</th>
+        <th style="padding:11px 7px;text-align:left;color:#222;">Telefone</th>
+        <th style="padding:11px 7px;text-align:left;color:#222;">Cidade</th>
+        <th style="padding:11px 7px;text-align:left;color:#222;">Estado</th>
+        <th style="padding:11px 7px;text-align:left;color:#222;">Pedidos</th>
+        <th style="padding:11px 7px;text-align:left;color:#222;">Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for cliente in clientes %}
+      <tr style="border-bottom:1.5px solid #eee;">
+        <td style="padding:9px 6px;">{{ cliente.id }}</td>
+        <td style="padding:9px 6px;">{{ cliente.nome }}</td>
+        <td style="padding:9px 6px;">{{ cliente.email }}</td>
+        <td style="padding:9px 6px;">{{ cliente.cpf_cnpj }}</td>
+        <td style="padding:9px 6px;">{{ cliente.telefone }}</td>
+        <td style="padding:9px 6px;">{{ cliente.cidade }}</td>
+        <td style="padding:9px 6px;">{{ cliente.estado }}</td>
+        <td style="padding:9px 6px;text-align:center;">{{ cliente.pedidos|length }}</td>
+        <td style="padding:9px 6px;">
+          <a href="{{ url_for('routes.admin_cliente_pedidos', cliente_id=cliente.id) }}" class="btn btn-sm">Ver Pedidos</a>
+          <!-- Opcional: Adicionar botão Editar depois -->
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% if clientes|length == 0 %}
+    <div style="text-align:center;color:#888;font-size:1.08rem;margin-top:24px;">
+      Nenhum cliente encontrado.
+    </div>
+  {% endif %}
+</section>
+{% endblock %}

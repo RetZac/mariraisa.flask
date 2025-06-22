@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block title %}Detalhe do Pedido #{{ pedido.id }} - Admin | Maria Raisa{% endblock %}
+
+{% block content %}
+<section style="max-width:900px;margin:38px auto;background:#fff;border-radius:18px;box-shadow:0 4px 28px rgba(60,60,60,0.09);padding:32px 16px;">
+  <h1 style="font-family:'Montserrat',sans-serif;font-size:1.7rem;font-weight:900;color:#111;margin-bottom:16px;text-align:center;">
+    Detalhe do Pedido #{{ pedido.id }}
+  </h1>
+
+  <div style="margin-bottom:28px;">
+    <strong>Cliente:</strong>
+{% if pedido.cliente %}
+  {{ pedido.cliente.nome }} (ID {{ pedido.cliente.id }})
+{% else %}
+  <span style="color:#888;">Cliente não encontrado</span>
+{% endif %}
+<br>
+    <strong>Email:</strong> {{ pedido.cliente.email }}<br>
+    <strong>Telefone:</strong> {{ pedido.cliente.telefone }}<br>
+    <strong>Endereço:</strong> {{ pedido.cliente.endereco }}, {{ pedido.cliente.cidade }} - {{ pedido.cliente.estado }}<br>
+    <strong>Data do Pedido:</strong> {{ pedido.data.strftime('%d/%m/%Y %H:%M') }}<br>
+  {% if pedido.frete_transportadora %}
+  <strong>Frete:</strong> {{ pedido.frete_transportadora }} –
+  R$ {{ '%.2f' | format(pedido.frete_valor) }}
+  <small>({{ pedido.frete_prazo }})</small><br>
+{% endif %}
+    <strong>Status:</strong>
+    {% set cores = {
+      'Pago': '#28a745',
+      'Aguardando pagamento': '#c0392b',
+      'Em produção': '#f7b731',
+      'Pronto para envio': '#111',
+      'Enviado': '#3fa996',
+      'Cancelado': '#a31a1a'
+    } %}
+    <span style="font-weight:700;color:{{ cores.get(pedido.status, '#333') }}">{{ pedido.status }}</span>
+
+    <!-- Atualizar Status -->
+    <form action="{{ url_for('routes.atualizar_status_pedido', pedido_id=pedido.id) }}" method="post" style="margin-top:10px;">
+      <label for="novo_status"><strong>Alterar status:</strong></label>
+      <select name="novo_status" id="novo_status" style="margin-left:7px;padding:4px 10px;border-radius:7px;">
+        {% for s in ['Aguardando pagamento', 'Pago', 'Em produção', 'Pronto para envio', 'Enviado', 'Cancelado'] %}
+          <option value="{{ s }}" {% if pedido.status == s %}selected{% endif %}>{{ s }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit" class="btn btn-sm">Atualizar</button>
+    </form>
+
+    <!-- Confirmar Pagamento -->
+    {% if pedido.status != 'Pago' %}
+      <form action="{{ url_for('routes.confirmar_pagamento', pedido_id=pedido.id) }}" method="post" style="margin-top:16px;">
+        <button type="submit" class="btn btn-sm" style="background:#1ba84e;color:white;padding:6px 14px;border:none;border-radius:8px;">
+          ✅ Confirmar Pagamento
+        </button>
+      </form>
+    {% endif %}
+
+    <!-- Nota Fiscal -->
+    <br><strong>Número da NF:</strong>
+    {% if pedido.nf_emitida and pedido.numero_nf %}
+      <span style="color:#222;font-weight:700;">{{ pedido.numero_nf }}</span>
+    {% else %}
+      <span style="color:#888;">Não emitida</span>
+    {% endif %}
+
+    {% if not pedido.nf_emitida %}
+      <form action="{{ url_for('routes.emitir_nf', pedido_id=pedido.id) }}" method="post" style="display:inline;">
+        <button type="submit" class="btn btn-sm" style="margin-left:10px;">Emitir NF</button>
+      </form>
+    {% endif %}
+  </div>
+
+  <!-- Itens do Pedido -->
+  <h2 style="font-size:1.19rem;font-weight:800;margin:20px 0 11px 0;color:#2a2a2a;">Itens do Pedido</h2>
+  <table style="width:100%;border-collapse:collapse;font-size:1.04rem;margin-bottom:24px;">
+    <thead>
+      <tr style="background:#fafafa;">
+        <th style="padding:11px 7px;text-align:left;">Produto</th>
+        <th style="padding:11px 7px;text-align:left;">Tamanho</th>
+        <th style="padding:11px 7px;text-align:left;">Qtd</th>
+        <th style="padding:11px 7px;text-align:left;">Unitário</th>
+        <th style="padding:11px 7px;text-align:left;">Total</th>
+        <th style="padding:11px 7px;text-align:left;">Foto</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in pedido.itens %}
+      <tr style="border-bottom:1.5px solid #eee;">
+        <td style="padding:10px 6px;">{{ item.nome_produto }}</td>
+        <td style="padding:10px 6px;">{{ item.tamanho or '-' }}</td>
+        <td style="padding:10px 6px;">{{ item.quantidade }}</td>
+        <td style="padding:10px 6px;">R$ {{ "%.2f"|format(item.preco_unitario) }}</td>
+        <td style="padding:10px 6px;font-weight:700;">R$ {{ "%.2f"|format(item.preco_total) }}</td>
+        <td style="padding:10px 6px;">
+          {% if item.imagem_produto %}
+            <img src="{{ url_for('static', filename='images/' ~ item.imagem_produto) }}" style="width:52px;height:52px;object-fit:cover;border-radius:8px;border:1.3px solid #e5e5e5;">
+          {% else %}
+            <span style="color:#888;">-</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <!-- Total -->
+  <div style="font-weight:900;font-size:1.12rem;text-align:right;margin-top:15px;">
+    Total do Pedido: <span style="color:#1ba84e;">R$ {{ "%.2f"|format(pedido.total) }}</span>
+  </div>
+
+  <!-- PDF -->
+  <div style="text-align:right;margin-top:22px;">
+    <a href="{{ url_for('routes.baixar_pedido_pdf', pedido_id=pedido.id) }}" class="btn btn-sm" target="_blank">Baixar PDF do Pedido</a>
+  </div>
+</section>
+{% endblock %}

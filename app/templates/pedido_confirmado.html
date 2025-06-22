@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}Pedido Confirmado - Maria Raisa{% endblock %}
+
+{% block content %}
+<section style="max-width: 500px; margin: 44px auto 0 auto; background: #fff; border-radius: 15px; box-shadow: 0 4px 28px rgba(60,60,60,0.11); padding: 42px 26px 36px 26px; text-align: center;">
+  <svg width="60" height="60" fill="none" style="margin-bottom:18px;">
+    <circle cx="30" cy="30" r="29" stroke="#28a745" stroke-width="2"/>
+    <path d="M18 31l8 8 16-16" stroke="#28a745" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+
+  <h1 style="font-family:'Montserrat',sans-serif;font-size:2.1rem;font-weight:900;color:#222;margin-bottom:7px;">Pedido realizado!</h1>
+
+  <div style="color:#333; font-size:1.07rem; margin-bottom: 14px;">
+    Seu pedido foi recebido com sucesso.<br>
+    Número do pedido: <span style="font-weight:700;">#{{ pedido.id }}</span>
+  </div>
+
+  <div style="margin-bottom:15px; color:#888;">
+    Status: <span style="font-weight:600;color:#111;">{{ pedido.status or '---' }}</span>
+  </div>
+
+  <hr style="border:none; border-top:1.5px solid #eee; margin: 26px 0 22px 0;">
+
+  <h2 style="font-size:1.18rem;font-weight:700;margin-bottom:11px;">Resumo do Pedido</h2>
+  <div style="text-align:left; margin:0 auto 22px auto; max-width:350px;">
+    {% for item in pedido.itens %}
+      <div style="display:flex; align-items:center; gap:9px; margin-bottom:13px;">
+        <img src="{{ url_for('static', filename='images/' ~ (item.imagem_produto or 'placeholder.jpg')) }}" alt="{{ item.nome_produto or 'Produto' }}" style="width:40px;height:40px;object-fit:cover;border-radius:6px;">
+        <div>
+          <div style="font-weight:600;">{{ item.nome_produto or 'Produto' }}</div>
+          <div style="font-size:0.95em; color:#666;">Qtd: {{ item.quantidade or 1 }}</div>
+          {% if item.tamanho %}
+            <div style="font-size:0.92em;color:#bbb;">Tam: {{ item.tamanho }}</div>
+          {% endif %}
+        </div>
+        <div style="margin-left:auto; font-weight:700; color:#222;">R$ {{ '%.2f'|format(item.preco_total or 0) }}</div>
+      </div>
+    {% endfor %}
+
+    <div style="font-size:1.02rem; color:#555; margin-top:20px;">
+      <p style="text-align:right;">
+        <strong>Subtotal:</strong>
+        R$ {{ '%.2f'|format((pedido.total or 0) - (pedido.frete_valor or 0)) }}
+      </p>
+
+      {% if pedido.frete_transportadora %}
+        <p style="text-align:right;">
+          <strong>Frete ({{ pedido.frete_transportadora }}):</strong>
+          R$ {{ '%.2f'|format(pedido.frete_valor or 0) }}
+          {% if pedido.frete_prazo %}
+            <small>({{ pedido.frete_prazo | safe }})</small>
+          {% endif %}
+        </p>
+      {% endif %}
+
+      <p style="text-align:right; font-weight:800; margin-top:10px;">
+        Total com Frete: <span style="color:#28a745;">R$ {{ '%.2f'|format(pedido.total or 0) }}</span>
+      </p>
+    </div>
+  </div>
+
+  <a href="{{ url_for('routes.area_cliente') }}" class="btn" style="margin-top:8px;width:100%;">Ver meus pedidos</a>
+
+  <div style="margin-top:17px;color:#888;font-size:0.98em;">
+    Você receberá atualizações por e-mail.<br>
+    Dúvidas? <a href="https://wa.me/55SEUNUMERO" target="_blank" style="color:#111;">Fale com o atendimento</a>
+  </div>
+</section>
+{% endblock %}

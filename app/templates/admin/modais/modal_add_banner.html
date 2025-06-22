@@ -1,0 +1,28 @@
+<!-- Modal Adicionar Banner -->
+<div id="modalAddBanner" class="modal" style="display:none;">
+  <div class="modal-content" style="max-width:430px;">
+    <button class="close" data-modal="modalAddBanner" aria-label="Fechar">&times;</button>
+    <h2 style="margin-bottom:24px; font-size:1.3rem; font-family:'Montserrat',sans-serif;">Adicionar Banner</h2>
+    <form action="{{ url_for('routes.add_banner') }}" method="POST" enctype="multipart/form-data" autocomplete="off">
+      <label for="titulo_add_banner" style="font-weight:600;">Título</label>
+      <input type="text" name="titulo" id="titulo_add_banner" required style="margin-bottom:12px;">
+
+      <label for="ordem_add_banner" style="font-weight:600;">Ordem (número)</label>
+      <input type="number" name="ordem" id="ordem_add_banner" min="1" required style="margin-bottom:12px;">
+
+<label for="imagem_add_banner" style="font-weight:600;">Imagem</label>
+<div style="color:#888; font-size:0.97rem; margin-bottom:4px;">
+  Tamanho recomendado: <strong>1200 x 400 px</strong> (proporção 3:1)
+</div>
+<input type="file" name="imagem" id="imagem_add_banner" accept="image/*" required style="margin-bottom:16px;">
+
+
+      <label for="ativo_add_banner" style="font-weight:600;">Ativo?</label>
+      <select name="ativo" id="ativo_add_banner" required style="margin-bottom:22px;">
+        <option value="1">Sim</option>
+        <option value="0">Não</option>
+      </select>
+      <button type="submit" class="btn" style="width:100%; margin-top:4px;">Salvar Banner</button>
+    </form>
+  </div>
+</div>

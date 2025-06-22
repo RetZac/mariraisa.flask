@@ -1,0 +1,17 @@
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.estrela-destaque').forEach(function(star) {
+    star.addEventListener('click', function() {
+      var produtoId = this.getAttribute('data-id');
+      var el = this;
+      fetch(`/admin/produto/${produtoId}/toggle_destaque`, {
+        method: 'POST'
+      })
+      .then(response => response.json())
+      .then(data => {
+        el.style.color = data.destaque ? 'gold' : '#bbb';
+      });
+    });
+  });
+});
+</script>

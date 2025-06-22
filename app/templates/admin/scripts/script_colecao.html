@@ -1,0 +1,20 @@
+<script>
+  document.querySelectorAll('.flag-colecao').forEach(function(span) {
+    span.addEventListener('click', function() {
+      const produtoId = this.dataset.id;
+      fetch(`/admin/colecao/toggle/${produtoId}`, {
+        method: 'POST'
+      })
+      .then(response => {
+        if (response.ok) {
+          // Alternar cor
+          if (this.style.color === 'green') {
+            this.style.color = '#bbb';
+          } else {
+            this.style.color = 'green';
+          }
+        }
+      });
+    });
+  });
+</script>

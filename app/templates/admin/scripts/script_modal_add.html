@@ -1,0 +1,52 @@
+<script>
+function adicionarCor() {
+  const container = document.getElementById('cores-container');
+  const div = document.createElement('div');
+  div.classList.add('cor-item');
+  div.style.display = 'flex';
+  div.style.gap = '8px';
+  div.style.marginBottom = '8px';
+  div.innerHTML = `
+    <input type="text" name="cores_nomes[]" placeholder="Nome da Cor" required style="flex:1; padding:8px;">
+    <input type="file" name="cores_imagens[]" accept="image/*" required style="flex:1;">
+  `;
+  container.appendChild(div);
+}
+</script>
+
+<script>
+document.getElementById('btnAddProduto').addEventListener('click', () => {
+  document.getElementById('modalAddProduto').style.display = 'flex';
+});
+
+function fecharModalAdd() {
+  document.getElementById('modalAddProduto').style.display = 'none';
+}
+
+let arquivosAddSelecionados = [];
+document.getElementById('fotosAdd').addEventListener('change', function(e) {
+  arquivosAddSelecionados = Array.from(e.target.files);
+  const previewDiv = document.getElementById('galeriaAddPreview');
+  previewDiv.innerHTML = '';
+  arquivosAddSelecionados.forEach(file => {
+    const reader = new FileReader();
+    reader.onload = ev => {
+      const img = document.createElement('img');
+      img.src = ev.target.result;
+      img.style.width = '54px';
+      img.style.height = '54px';
+      img.style.objectFit = 'cover';
+      img.style.borderRadius = '7px';
+      img.style.border = '1px solid #ccc';
+      previewDiv.appendChild(img);
+    };
+    reader.readAsDataURL(file);
+  });
+});
+
+document.querySelector('#modalAddProduto form').addEventListener('submit', function(e) {
+  const dataTransfer = new DataTransfer();
+  arquivosAddSelecionados.forEach(file => dataTransfer.items.add(file));
+  this.querySelector('input[name="fotos"]').files = dataTransfer.files;
+});
+</script>

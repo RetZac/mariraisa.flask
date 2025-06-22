@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}Produtos - Maria Raisa{% endblock %}
+
+{% block content %}
+<section class="produtos-section">
+  <h2 class="titulo-secao">Nossos Produtos</h2>
+
+  <div class="produtos-categorias" style="margin-bottom: 32px; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+    <a href="{{ url_for('routes.produtos', categoria='todas') }}" class="btn {% if not categoria or categoria == 'todas' %}active{% endif %}">Todas</a>
+    {% for cat in categorias %}
+      <a href="{{ url_for('routes.produtos', categoria=cat.nome) }}" class="btn {% if categoria == cat.nome %}active{% endif %}">{{ cat.nome }}</a>
+    {% endfor %}
+  </div>
+
+  {% set saltos = ['Salto Alto Bloco (8,9cm)', 'Salto Médio Bloco (6,7cm)', 'Salto Baixo Bloco (5cm)', 'Salto Alto Fino (8,9cm)', 'Salto Médio Fino (6,7cm)', 'Salto Baixo Fino (5cm)',  'Salto Mini (1cm)', 'Rasteira', 'Sem Salto'] %}
+
+  {% for salto in saltos %}
+    {% set grupo = produtos | selectattr('tipo_salto', 'equalto', salto) | list %}
+    {% if grupo %}
+      <h2 class="titulo-secao" style="margin-top: 40px;">{{ salto }}</h2>
+      <div class="slider-container">
+        <button class="slider-btn prev-btn">&#8592;</button>
+        <div class="produtos-slider">
+          {% for produto in grupo %}
+            <div class="produto-card">
+              <a href="{{ url_for('routes.produto_detail', produto_id=produto.id) }}">
+                <div class="thumb-wrapper">
+                  <img src="{{ url_for('static', filename='images/' ~ produto.imagem_principal) }}" alt="{{ produto.nome }}" class="thumb-img">
+                </div>
+              </a>
+              <div class="produto-info">
+                <h3 class="nome-produto">{{ produto.nome }}</h3>
+                <div class="preco-caixa" style="margin-bottom: 6px;">
+                  <strong>R$ {{ '%.2f'|format(produto.preco_par) }}</strong> <span>/ par</span>
+                </div>
+                <p style="font-size: 0.95rem; color: #444;">
+                  Total: <strong>R$ {{ '%.2f'|format(produto.preco_par * produto.qtd_minima) }}</strong> ({{ produto.qtd_minima }} pares)
+                </p>
+                <p>Grade: 34 ao 39</p>
+              </div>
+              <a href="{{ url_for('routes.produto_detail', produto_id=produto.id) }}" class="btn btn-vermais">Ver detalhes</a>
+            </div>
+          {% endfor %}
+        </div>
+        <button class="slider-btn next-btn">&#8594;</button>
+      </div>
+    {% endif %}
+  {% endfor %}
+</section>
+
+<!-- JavaScript do carrossel -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.slider-container').forEach(container => {
+      const slider = container.querySelector('.produtos-slider');
+      const prevBtn = container.querySelector('.prev-btn');
+      const nextBtn = container.querySelector('.next-btn');
+
+      prevBtn.addEventListener('click', () => {
+        slider.scrollBy({ left: -300, behavior: 'smooth' });
+      });
+
+      nextBtn.addEventListener('click', () => {
+        slider.scrollBy({ left: 300, behavior: 'smooth' });
+      });
+    });
+  });
+</script>
+{% endblock %}

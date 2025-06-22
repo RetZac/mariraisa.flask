@@ -1,0 +1,144 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: #fff; /* Branco para navbar */
+  border-bottom: 1.5px solid #ede8de; /* Bege claro, discreto */
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+  font-family: 'Montserrat', Arial, sans-serif;
+}
+body {
+  padding-top: 80px;  /* 👈 espaço equivalente à altura da navbar */
+}
+.navbar .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.5rem 1rem;
+}
+.logo {
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: #111;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+  margin: 0;
+  padding: 0;
+}
+.nav-links li a {
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 4px 0;
+  color: #111;
+  background: none;
+  border-radius: 0;
+  transition: color 0.18s;
+}
+.nav-links li a:hover {
+  color: #000000;
+  background: none;
+  text-decoration: underline;
+}
+.nav-buttons {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Carrinho na navbar */
+.nav-cart {
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-left: 15px;
+  cursor: pointer;
+}
+.cart-count {
+  background: #111;
+  color: #fff;
+  border-radius: 50%;
+  padding: 1px 8px;
+  margin-left: 6px;
+  font-size: 0.97em;
+  font-weight: 600;
+}
+
+/* ===== BUTTONS ===== */
+.btn, .btn-primary, .btn-success, .btn-dark, .btn-warning, .btn-danger, .btn-add, .btn-conta, .btn-sair, .btn-admin, .btn-vermais, .btn-group a, .btn.btn-sm,
+.luxo-btn-acao-pedido {
+  background: none !important;
+  color: #111 !important;
+  border: none !important;
+  font-weight: 700 !important;
+  border-radius: 7px !important;
+  padding: 0.5rem 1.25rem !important;
+  font-size: 1rem !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  display: inline-block;
+  box-shadow: none !important;
+  outline: none !important;
+  transition: background 0.16s, color 0.16s;
+}
+.btn:hover,
+.btn-primary:hover,
+.btn-success:hover,
+.btn-dark:hover,
+.btn-warning:hover,
+.btn-danger:hover,
+.btn-add:hover,
+.btn-conta:hover,
+.btn-sair:hover,
+.btn-admin:hover,
+.btn-vermais:hover,
+.btn-group a:hover,
+.btn.btn-sm:hover,
+.luxo-btn-acao-pedido:hover {
+  background: rgba(0, 0, 0, 0.89) !important;
+  color: #fff !important;
+}
+.btn.btn-sm { font-size: 0.95em; padding: 6px 12px; }
+.btn-admin, .btn-sair, .btn-conta, .btn-add { box-shadow: none; }
+
+@media (max-width: 900px) {
+  .navbar .container { flex-direction: column; align-items: flex-start; }
+  .nav-links { flex-direction: column; gap: 0.7rem; }
+  .nav-buttons { width: 100%; justify-content: flex-start; }
+}
+
+.navbar .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+}
+.navbar .logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+}
+.nav-links a {
+  font-weight: 600;
+}
+.nav-buttons {
+  display: flex;
+  gap: 0.75rem;
+}

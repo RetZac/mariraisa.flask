@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block title %}Área do Cliente - Maria Raisa{% endblock %}
+
+{% block content %}
+<style>
+.area-cliente-section {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 24px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+.area-cliente-section h2 {
+    font-size: 24px;
+    margin-bottom: 16px;
+}
+.cliente-info p {
+    margin: 4px 0;
+    font-size: 15px;
+}
+.table-carrinho {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 24px;
+}
+.table-carrinho th, .table-carrinho td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+}
+.table-carrinho th {
+    background-color: #f8f8f8;
+    font-weight: bold;
+}
+.btn-download {
+    padding: 6px 12px;
+    font-size: 13px;
+    background: #28a745;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+}
+.btn-download:hover {
+    background: #218838;
+}
+.status-pendente {
+    color: #888;
+    font-style: italic;
+}
+.btn-sair {
+    display: inline-block;
+    margin-top: 28px;
+    background: #333;
+    color: #fff;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 6px;
+}
+.btn-sair:hover {
+    background: #000;
+}
+</style>
+
+<div class="area-cliente-section">
+    <h2>Olá, {{ cliente.nome }}!</h2>
+    <div class="cliente-info">
+        <p><b>Email:</b> {{ cliente.email }}</p>
+        <p><b>Telefone:</b> {{ cliente.telefone }}</p>
+        <p><b>Cidade:</b> {{ cliente.cidade }}, {{ cliente.estado }}</p>
+    </div>
+    <hr>
+    <h3 style="margin-top: 24px;">Histórico de Pedidos</h3>
+    {% if pedidos %}
+        <table class="table-carrinho">
+<tr>
+    <th>Nº Pedido</th>
+    <th>Data</th>
+    <th>Total</th>
+    <th>Status</th>
+    <th>Nota Fiscal</th>
+</tr>
+{% for pedido in pedidos %}
+<tr>
+    <td>{{ pedido.id }}</td>
+    <td>{{ pedido.data.strftime('%d/%m/%Y') }}</td>
+    <td>R$ {{ '%.2f'|format(pedido.total) }}</td>
+    <td>{{ pedido.status }}</td>
+    <td>
+        {% if pedido.nf_emitida and pedido.numero_nf %}
+            <a href="{{ url_for('static', filename='nfs/nf_' ~ pedido.numero_nf ~ '.pdf') }}" class="btn-download" target="_blank">📄 Baixar NF</a>
+        {% else %}
+            <span class="status-pendente">⏳ Aguardando emissão</span>
+        {% endif %}
+    </td>
+</tr>
+{% endfor %}
+        </table>
+    {% else %}
+        <p style="margin-top: 16px;">Você ainda não fez nenhum pedido.</p>
+    {% endif %}
+
+    <a href="{{ url_for('routes.logout') }}" class="btn-sair">Sair da conta</a>
+</div>
+{% endblock %}

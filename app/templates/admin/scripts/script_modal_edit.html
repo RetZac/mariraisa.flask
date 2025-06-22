@@ -1,0 +1,98 @@
+<script>
+function fecharModalEdit() {
+  document.getElementById('modalEditProduto').style.display = 'none';
+}
+
+// Função para abrir o modal e preencher os campos
+function abrirModalEditarProduto(tr) {
+  const id = tr.dataset.id;
+
+  // Carrega coleções vinculadas
+fetch(`/admin/produto/${id}/colecoes`)
+  .then(res => res.json())
+  .then(data => {
+    data.colecoes_ids.forEach(colecaoId => {
+      const checkbox = document.querySelector(`.checkbox-colecao[value="${colecaoId}"]`);
+      if (checkbox) checkbox.checked = true;
+    });
+  });
+
+
+  // Define action do form
+  const form = document.getElementById('formEditProduto');
+  form.action = `/admin/editar_produto/${id}`;
+  document.getElementById('edit_produto_id').value = id;
+  console.log("Código carregado:", tr.dataset.codigo);
+  document.getElementById('edit_codigo').value = tr.dataset.codigo || '';
+  document.getElementById('edit_nome').value = tr.dataset.nome;
+  document.getElementById('edit_descricao_curta').value = tr.dataset.descricaoCurta || '';
+  document.getElementById('edit_descricao').value = tr.dataset.descricao || '';
+  document.getElementById('edit_preco_par').value = tr.dataset.precoPar;
+  document.getElementById('edit_preco_parcelado').value = tr.dataset.precoParcelado;
+  document.getElementById('edit_qtd_minima').value = tr.dataset.qtdMinima;
+  document.getElementById('edit_categoria').value = tr.dataset.categoriaId;
+  document.getElementById('edit_colecao').value = tr.dataset.colecaoId || '';
+
+
+
+
+  // Cores com imagens (edit)
+  const container = document.getElementById('edit-cores-container');
+  container.innerHTML = ''; // limpa anteriores
+  let cores = {};
+  try {
+    cores = JSON.parse(tr.dataset.cores);
+  } catch (e) {
+    cores = {};
+  }
+  for (const cor in cores) {
+    adicionarCorEdit(cor);
+  }
+
+  // Foto atual
+  const img = document.getElementById('imgFotoAtual');
+  if (tr.dataset.foto) {
+    img.src = `/static/images/${tr.dataset.foto}`;
+    img.style.display = 'block';
+  } else {
+    img.style.display = 'none';
+  }
+
+
+  // Exibe modal
+  document.getElementById('modalEditProduto').style.display = 'flex';
+
+    // Preenche tipo de salto
+    document.getElementById('edit_tipo_salto').value = tr.dataset.tipoSalto || '';
+
+  // Carrega imagens extras via fetch
+  carregarImagensExtras(id);
+}
+
+// Event listener para botões de editar
+setTimeout(() => {
+  document.querySelectorAll('.btn-edit-produto').forEach(botao => {
+    botao.addEventListener('click', () => {
+      const tr = botao.closest('tr');
+      abrirModalEditarProduto(tr);
+    });
+  });
+}, 100);
+
+// Função para adicionar linha de cor com input de imagem
+function adicionarCorEdit(nome = '') {
+  const container = document.getElementById('edit-cores-container');
+  const div = document.createElement('div');
+  div.classList.add('cor-item');
+  div.style.display = 'flex';
+  div.style.gap = '8px';
+  div.style.marginBottom = '8px';
+  div.innerHTML = `
+    <input type="text" name="cores_nomes[]" placeholder="Nome da Cor" value="${nome}" required style="flex:1; padding:8px;">
+    <input type="file" name="cores_imagens[]" accept="image/*" style="flex:1;">
+  `;
+  container.appendChild(div);
+
+}
+
+</script>

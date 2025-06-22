@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>{% block title %}Maria Raisa{% endblock %}</title>
+
+  <meta name="description" content="Atacado de calçados com estilo e qualidade para revendedores em todo Brasil." />
+  <meta name="keywords" content="calçados, atacado, revenda, Maria Raisa, sapatos femininos, sandálias, sapatos" />
+  <meta name="author" content="Maria Raisa" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+
+
+  {% block head %}{% endblock %}
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <a href="{{ url_for('routes.index') }}" class="logo">
+      <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo MR" style="height:22px; width:auto;"/>
+      <span>Maria Raisa</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="{{ url_for('routes.index') }}">Home</a></li>
+      <li><a href="{{ url_for('routes.produtos') }}">Produtos</a></li>
+      <li><a href="https://wa.me/55SEUNUMERO" target="_blank">Fale com um vendedor</a></li>
+    </ul>
+    <div class="nav-buttons">
+              <span>Olá, {{ current_user.nome or current_user.email }}</span>
+        <a href="{{ url_for('routes.carrinho') }}" class="carrinho-btn">🛒 Carrinho</a>
+      </a>
+      {% if current_user.is_authenticated %}
+        {% if current_user.__class__.__name__ == "Admin" %}
+          <a href="{{ url_for('routes.painel_admin') }}" class="btn">Painel Admin</a>
+          <a href="{{ url_for('routes.logout') }}" class="btn">Sair</a>
+        {% else %}
+          <a href="{{ url_for('routes.area_cliente') }}" class="btn">Minha Conta</a>
+          <a href="{{ url_for('routes.logout') }}" class="btn">Sair</a>
+        {% endif %}
+      {% else %}
+        <a href="javascript:void(0)" class="btn" id="btnLoginCliente">Login</a>
+        <a href="javascript:void(0)" class="btn" id="btnCadastro">Cadastre-se</a>
+      {% endif %}
+    </div>
+  </div>
+</nav>
+
+<main>
+  {% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer">
+  <div class="footer-container">
+    <!-- Logo + Empresa -->
+    <div class="footer-logo-info">
+      <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo MR" />
+      <div>
+        <span style="font-weight: bold; font-size: 1.13rem;">Maria Raisa</span>
+        <div style="font-size:0.98rem; margin-top: 3px;">
+          Endereço: Rua Antônio Camerotte, 89 - Jardim Maria Luiza IV, Jaú/SP - 17213-180<br>
+          CNPJ: 19.715.451/0001-33
+        </div>
+      </div>
+    </div>
+    <!-- Links institucionais -->
+    <div class="footer-links">
+      <ul>
+<li><a href="{{ url_for('routes.como_comprar') }}">Como Comprar</a></li>
+<li><a href="{{ url_for('routes.prazo_entrega') }}">Prazo de Entrega</a></li>
+<li><a href="{{ url_for('routes.trocas_devolucao') }}">Trocas e Devolução</a></li>
+<li><a href="{{ url_for('routes.entregas_retirada') }}">Entregas e Retirada</a></li>
+<li><a href="{{ url_for('routes.quem_somos') }}">Quem Somos</a></li>
+<li><a href="{{ url_for('routes.formas_pagamento') }}">Formas de Pagamento</a></li>
+<li><a href="{{ url_for('routes.destaques') }}">Destaques</a></li>
+      </ul>
+    </div>
+    <!-- Redes sociais -->
+    <div class="footer-social">
+      <div style="margin-bottom: 6px;">Redes Sociais</div>
+      <a href="https://www.instagram.com/mariaraisa.mr/" target="_blank" rel="noopener">
+        <img src="{{ url_for('static', filename='icons/instagram.svg') }}" alt="Instagram" />
+      </a>
+      <a href="https://www.facebook.com/mariaraisaa/?locale=pt_BR" target="_blank" rel="noopener">
+        <img src="{{ url_for('static', filename='icons/facebook.svg') }}" alt="Facebook" />
+      </a>
+      <a href="https://wa.me/55SEUNUMERO" target="_blank" rel="noopener">
+        <img src="{{ url_for('static', filename='icons/whatsapp.svg') }}" alt="WhatsApp" />
+      </a>
+    </div>
+    <!-- Contato -->
+    <div class="footer-contact">
+      <div style="margin-bottom: 6px;">Contato</div>
+      <p>Email: lojamariaraisa@hotmail.com</p>
+      <p>Telefone: (11) 99999-9999</p>
+    </div>
+
+  <!-- NOVA SEÇÃO SOBRE A EMPRESA -->
+  <div class="footer-sobre">
+    <h2>Sobre a Maria Raisa</h2>
+    <p>Fundada com paixão por moda feminina, a Maria Raisa oferece calçados no atacado com qualidade, estilo e conforto para revendedores de todo o Brasil. Nosso compromisso é garantir produtos que encantam e fidelizam clientes.</p>
+    <p>Contamos com uma equipe dedicada e um atendimento personalizado para ajudar seu negócio a crescer.</p>
+  </div>
+
+  </div>
+  <div class="copyright">
+    © 2025 Maria Raisa. Todos os direitos reservados.
+  </div>
+</footer>
+<!-- Modal Cadastro Cliente -->
+<div id="modalCadastro" class="modal" role="dialog" aria-modal="true" aria-labelledby="tituloCadastroCliente">
+  <div class="modal-content">
+    <button class="close" data-modal="modalCadastro" aria-label="Fechar">&times;</button>
+    <h2 id="tituloCadastroCliente">Cadastro Cliente</h2>
+    <form action="{{ url_for('routes.cadastro') }}" method="post" novalidate>
+      <label for="cadastroNome">Nome Completo</label>
+      <input id="cadastroNome" name="nome" type="text" placeholder="Seu nome completo" required>
+      <label for="cadastroEmail">Email</label>
+      <input id="cadastroEmail" name="email" type="email" placeholder="seu@email.com" required>
+      <label for="cadastroSenha">Senha</label>
+      <input id="cadastroSenha" name="senha" type="password" placeholder="Senha segura" required>
+      <label for="cadastroCpfCnpj">CPF ou CNPJ</label>
+      <input id="cadastroCpfCnpj" name="cpf_cnpj" type="text" placeholder="CPF ou CNPJ" required>
+      <label for="cadastroTelefone">Telefone</label>
+      <input id="cadastroTelefone" name="telefone" type="tel" placeholder="(00) 00000-0000" required>
+      <label for="cadastroEndereco">Endereço</label>
+      <input id="cadastroEndereco" name="endereco" type="text" placeholder="Rua, número, complemento" required>
+      <label for="cadastroCidade">Cidade</label>
+      <input id="cadastroCidade" name="cidade" type="text" placeholder="Sua cidade" required>
+      <label for="cadastroEstado">Estado</label>
+      <input id="cadastroEstado" name="estado" type="text" placeholder="Estado" required>
+      <label for="cadastroCep">CEP</label>
+      <input id="cadastroCep" name="cep" type="text" placeholder="CEP" required>
+      <button type="submit" class="btn">Cadastrar</button>
+    </form>
+  </div>
+</div>
+
+<!-- Modal Login Cliente -->
+<div id="modalLoginCliente" class="modal" role="dialog" aria-modal="true" aria-labelledby="tituloLoginCliente">
+  <div class="modal-content">
+    <button class="close" data-modal="modalLoginCliente" aria-label="Fechar">&times;</button>
+    <h2 id="tituloLoginCliente">Login Cliente</h2>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+    <form action="{{ url_for('routes.login') }}" method="post" novalidate>
+      <label for="loginClienteUsuario">E-mail</label>
+      <input id="loginClienteUsuario" type="text" name="email" placeholder="E-mail" required>
+      <label for="loginClienteSenha">Senha</label>
+      <input id="loginClienteSenha" type="password" name="senha" placeholder="Senha" required>
+      <button type="submit" class="btn">Entrar</button>
+    </form>
+  </div>
+</div>
+
+<!-- Modal Login Admin -->
+<div id="modalLoginAdmin" class="modal" role="dialog" aria-modal="true" aria-labelledby="tituloLoginAdmin">
+  <div class="modal-content">
+    <button class="close" data-modal="modalLoginAdmin" aria-label="Fechar">&times;</button>
+    <h2 id="tituloLoginAdmin">Login Admin</h2>
+    <form action="{{ url_for('routes.login') }}" method="post" novalidate>
+      <label for="loginAdminEmail">Email</label>
+      <input id="loginAdminEmail" type="email" name="email" placeholder="Email" required>
+      <label for="loginAdminSenha">Senha</label>
+      <input id="loginAdminSenha" type="password" name="senha" placeholder="Senha" required>
+      <button type="submit" class="btn">Entrar</button>
+    </form>
+  </div>
+</div>
+
+<script>
+function openModal(modalId) {
+  document.getElementById(modalId).style.display = 'block';
+}
+document.getElementById('btnLoginCliente')?.addEventListener('click', () => openModal('modalLoginCliente'));
+document.getElementById('btnCadastro')?.addEventListener('click', () => openModal('modalCadastro'));
+document.getElementById('btnLoginAdmin')?.addEventListener('click', () => openModal('modalLoginAdmin'));
+document.querySelectorAll('.close').forEach(btn => {
+  btn.onclick = () => {
+    const modalId = btn.getAttribute('data-modal');
+    document.getElementById(modalId).style.display = 'none';
+  };
+});
+// Abrir modal por parâmetro na URL (?modal=login_cliente etc)
+document.addEventListener("DOMContentLoaded", function() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const modal = urlParams.get('modal');
+  if (modal === 'login_cliente') openModal('modalLoginCliente');
+  if (modal === 'cadastro') openModal('modalCadastro');
+  if (modal === 'login_admin') openModal('modalLoginAdmin');
+});
+  document.addEventListener('DOMContentLoaded', () => {
+    // Aponta todos os formulários de adicionar ao carrinho
+    document.querySelectorAll('.luxo-compra-form').forEach(form => {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form)
+        });
+
+        // Se o backend redirecionar (status 302), abrir popup
+        if (response.redirected) {
+          const modal = document.getElementById('modal-carrinho');
+          if (modal) modal.style.display = 'block';
+          atualizarCarrinho(); // atualiza o conteúdo do modal
+        }
+      });
+    });
+
+    // Fecha o modal se clicar fora
+    window.onclick = function(event) {
+      const modal = document.getElementById('modal-carrinho');
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    };
+  });
+
+  // Opcional: recarrega conteúdo do carrinho do servidor
+  async function atualizarCarrinho() {
+    const resposta = await fetch("{{ url_for('routes.carrinho') }}");
+    const html = await resposta.text();
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    const novaLista = doc.querySelector('#modal-carrinho .modal-content');
+    if (novaLista) {
+      document.querySelector('#modal-carrinho .modal-content').innerHTML = novaLista.innerHTML;
+    }
+  }
+</script>
+
+
+
+{% include 'modal_carrinho.html' %}
+
+<div id="custom-alert" class="custom-alert" style="display:none;">
+  <span id="custom-alert-msg"></span>
+  <button onclick="fecharAlerta()" class="fechar-alerta">×</button>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  new Swiper('.banner-swiper', {
+    loop: true,
+    autoplay: {
+      delay: 4000,
+      disableOnInteraction: false,
+    },
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
+    },
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+effect: 'fade',
+fadeEffect: { crossFade: true }
+  });
+});
+</script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

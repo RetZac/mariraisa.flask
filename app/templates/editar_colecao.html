@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Editar Coleção | Admin{% endblock %}
+
+{% block content %}
+<div class="admin-dashboard-wrapper">
+  <div class="form-editar-colecao" style="max-width: 500px; margin: auto; background: #fff; padding: 24px; border-radius: 12px; box-shadow: 0 0 12px rgba(0,0,0,0.05);">
+    <h2 style="text-align: center; margin-bottom: 24px;">Editar Coleção</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+      <label for="nome">Nome:</label>
+      <input type="text" id="nome" name="nome" value="{{ colecao.nome }}" required class="form-control" style="margin-bottom: 12px;">
+
+      <label for="slug">Slug:</label>
+      <input type="text" id="slug" name="slug" value="{{ colecao.slug }}" required class="form-control" style="margin-bottom: 12px;">
+
+      <label for="descricao">Descrição:</label>
+      <textarea id="descricao" name="descricao" rows="3" class="form-control" style="margin-bottom: 12px;">{{ colecao.descricao }}</textarea>
+
+      <label for="imagem">Imagem Atual:</label><br>
+      {% if colecao.imagem %}
+        <img src="{{ url_for('static', filename='images/' ~ colecao.imagem) }}" alt="Imagem Coleção" style="width:100%; max-width:240px; margin-bottom:12px;">
+      {% else %}
+        <p style="color:#999;">Nenhuma imagem enviada.</p>
+      {% endif %}
+
+      <label for="imagem">Nova Imagem:</label>
+      <input type="file" id="imagem" name="imagem" class="form-control" style="margin-bottom: 12px;">
+
+      <label><input type="checkbox" name="ativa" {% if colecao.ativa %}checked{% endif %}> Ativa</label>
+
+      <button type="submit" class="btn btn-success" style="width: 100%; margin-top: 16px;">Salvar Alterações</button>
+    </form>
+
+    <div style="text-align:center; margin-top:24px;">
+      <a href="{{ url_for('routes.admin_colecoes') }}" class="btn btn-outline-secondary">Voltar</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

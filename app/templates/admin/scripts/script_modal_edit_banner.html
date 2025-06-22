@@ -1,0 +1,29 @@
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  document.querySelectorAll('.btnEditBanner').forEach(btn => {
+    btn.addEventListener('click', function() {
+      // Preenche os campos do modal de edição
+      document.getElementById('edit_banner_id').value = btn.dataset.id;
+      document.getElementById('edit_titulo').value = btn.dataset.titulo;
+      document.getElementById('edit_ordem').value = btn.dataset.ordem;
+      document.getElementById('edit_ativo').value = btn.dataset.ativo;
+      // Define o action do formulário
+      document.getElementById('formEditBanner').action = '/admin/banners/edit/' + btn.dataset.id;
+      // Mostra o modal
+      document.getElementById('modalEditBanner').style.display = 'block';
+    });
+  });
+  document.querySelectorAll('.close').forEach(btn => {
+    btn.onclick = () => {
+      const modalId = btn.getAttribute('data-modal');
+      document.getElementById(modalId).style.display = 'none';
+    };
+  });
+  window.onclick = function(event) {
+    const modal = document.getElementById('modalEditBanner');
+    if (event.target === modal) {
+      modal.style.display = "none";
+    }
+  };
+});
+</script>

@@ -1,0 +1,135 @@
+.admin-dashboard-wrapper {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+.admin-dashboard {
+  max-width: 1200px;
+  margin: 48px auto 28px;
+  padding: 32px 20px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(60, 30, 120, 0.10);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.dashboard-cards {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+.card {
+  background: linear-gradient(90deg, #ece9f7, #f6f3fd);
+  border-radius: 13px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  flex: 1;
+  min-width: 200px;
+  text-align: center;
+  font-family: 'Montserrat', sans-serif;
+}
+.card span { display: block; color: #555; }
+.card strong { display: block; margin-top: 8px; font-size: 2.2rem; color: #4228b4; }
+
+/* tabela dentro do painel */
+.admin-dashboard table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  font-family: 'Segoe UI', sans-serif;
+}
+.admin-dashboard th,
+.admin-dashboard td {
+  padding: 12px 10px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+.admin-dashboard thead th {
+  background: #fafafa;
+  color: #222;
+  font-weight: 600;
+}
+/* ajuste no hover de linhas */
+.admin-dashboard tbody tr:hover {
+  background: #f7f7f7;
+}
+/* ===== BOTÃO ADICIONAR PRODUTO (Admin) ===== */
+.btn-add {
+  background: #111 !important;
+  color: #fff !important;
+  border: none !important;
+  font-weight: 700 !important;
+  border-radius: 7px !important;
+  padding: 11px 22px !important;
+  font-size: 1rem !important;
+  cursor: pointer !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+  transition: background 0.16s, color 0.16s !important;
+}
+.btn-add:hover {
+  background: #222 !important;
+}
+/* Modal full-screen oculto por padrão */
+.modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+/* Conteúdo interno */
+.modal-content {
+  background: #fff;
+  border-radius: 10px;
+  padding: 24px;
+  max-width: 600px;
+  width: 90%;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  position: relative;
+}
+/* Botão de fechar (x) */
+.close-btn {
+  position: absolute;
+  top: 8px; right: 8px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  line-height: 1;
+}
+.modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.4);
+  align-items: center;
+  justify-content: center;
+  overflow: auto; /* permite rolar o background, se quiser */
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 90vh;      /* nunca vai ultrapassar 90% da altura da tela */
+  overflow-y: auto;      /* aqui é o que faz o scroll interno */
+  box-sizing: border-box;
+}
+/* Miniaturas na tabela do Admin Dashboard */
+.produto-img-list img,
+.produto-img-galeria {
+  width: 54px !important;
+  height: 54px !important;
+  object-fit: cover !important;
+  border-radius: 7px;
+}
+/* ===== FIM PAINEL ADMIN ===== */

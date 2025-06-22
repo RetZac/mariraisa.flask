@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block title %}Pedidos - Admin | Maria Raisa{% endblock %}
+
+{% block content %}
+<section style="max-width: 1150px; margin: 38px auto 0 auto; background: #fff; border-radius: 16px; box-shadow: 0 4px 28px rgba(60,60,60,0.09); padding: 36px 18px;">
+  <h1 style="font-family:'Montserrat',sans-serif;font-size:1.35rem;font-weight:900;color:#111;margin-bottom:20px;">
+    Relatório de Pedidos
+  </h1>
+
+  <!-- Filtros -->
+  <form method="get" style="display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 22px; align-items: flex-end;">
+    <div>
+      <label for="data_inicio" style="font-size: 0.9rem;">Data Início</label><br>
+      <input type="date" id="data_inicio" name="data_inicio"
+             value="{{ request.args.get('data_inicio', '') }}"
+             style="padding: 7px 10px; border-radius: 7px; border: 1.2px solid #ddd;">
+    </div>
+
+    <div>
+      <label for="data_fim" style="font-size: 0.9rem;">Data Fim</label><br>
+      <input type="date" id="data_fim" name="data_fim"
+             value="{{ request.args.get('data_fim', '') }}"
+             style="padding: 7px 10px; border-radius: 7px; border: 1.2px solid #ddd;">
+    </div>
+
+    <div>
+      <label for="status" style="font-size: 0.9rem;">Status</label><br>
+      <select id="status" name="status"
+              style="padding: 7px 10px; border-radius: 7px; border: 1.2px solid #ddd;">
+        <option value="">Todos Status</option>
+        {% for s in ['Aguardando pagamento', 'Pago', 'Em produção', 'Pronto para envio', 'Enviado', 'Cancelado'] %}
+          <option value="{{ s }}" {% if request.args.get('status') == s %}selected{% endif %}>{{ s }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div style="flex:1;">
+      <label for="cliente" style="font-size: 0.9rem;">Cliente</label><br>
+      <input type="text" id="cliente" name="cliente"
+             placeholder="Buscar por nome ou e-mail"
+             value="{{ request.args.get('cliente', '') }}"
+             style="padding:7px 10px; border-radius:7px; border:1.2px solid #ddd; width: 100%;">
+    </div>
+
+    <div>
+      <button type="submit" class="btn btn-dark" style="margin-top:4px;">Filtrar</button>
+      <a href="{{ url_for('routes.admin_pedidos') }}" class="btn" style="margin-top:4px;">Limpar</a>
+    </div>
+  </form>
+
+  <!-- Lista de Pedidos -->
+  <table style="width:100%;border-collapse:collapse;font-size:1.04rem;">
+    <thead>
+      <tr style="background:#fafafa;">
+        <th style="padding:11px 7px;text-align:left;">Pedido</th>
+        <th style="padding:11px 7px;text-align:left;">Cliente</th>
+        <th style="padding:11px 7px;text-align:left;">Data</th>
+        <th style="padding:11px 7px;text-align:left;">Total</th>
+        <th style="padding:11px 7px;text-align:left;">Status</th>
+        <th style="padding:11px 7px;text-align:left;">NF</th>
+        <th style="padding:11px 7px;text-align:left;">Detalhes</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for pedido in pedidos %}
+        <tr style="border-bottom:1.5px solid #eee;">
+          <td style="padding:10px 6px;font-weight:600;">#{{ pedido.id }}</td>
+          <td style="padding:10px 6px;">{{ pedido.cliente.nome if pedido.cliente else '--' }}</td>
+          <td style="padding:10px 6px;">{{ pedido.data.strftime('%d/%m/%Y') }}</td>
+          <td style="padding:10px 6px;">R$ {{ "%.2f"|format(pedido.total) }}</td>
+          <td style="padding:10px 6px;">{{ pedido.status }}</td>
+          <td style="padding:10px 6px;">
+            {% if pedido.nf_emitida %}
+              <span style="color:#36a446;font-weight:700;">Emitida</span>
+            {% else %}
+              <span style="color:#c0392b;">Não</span>
+            {% endif %}
+          </td>
+          <td style="padding:10px 6px;">
+            <a href="{{ url_for('routes.admin_pedido_detalhe', pedido_id=pedido.id) }}" class="btn btn-sm">Ver</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% if not pedidos %}
+    <div style="color:#888;font-size:1.07rem;text-align:center;margin-top:22px;">
+      Nenhum pedido encontrado.
+    </div>
+  {% endif %}
+</section>
+{% endblock %}

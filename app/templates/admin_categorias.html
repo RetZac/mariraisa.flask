@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}Categorias de Produtos - Admin | Maria Raisa{% endblock %}
+
+{% block content %}
+<section class="admin-categ-container">
+  <h1 class="page-title">Categorias de Produtos</h1>
+
+  <!-- Formulário de adicionar nova categoria -->
+  <div class="add-cat-card">
+    <form method="post" action="{{ url_for('routes.adicionar_categoria') }}">
+      <input
+        type="text"
+        name="nome_categoria"
+        placeholder="Nova categoria..."
+        required
+        class="input-category"
+      >
+      <button type="submit" class="btn-sm">Adicionar</button>
+    </form>
+  </div>
+
+  <!-- Tabela de categorias -->
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>Categoria</th>
+        <th style="text-align:center;">Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for categoria in categorias %}
+      <tr>
+        <td>{{ categoria.nome }}</td>
+        <td>
+          <div class="inline-form-container">
+            <form
+              action="{{ url_for('routes.editar_categoria', categoria_id=categoria.id) }}"
+              method="post"
+              class="inline-form"
+            >
+              <input
+                type="text"
+                name="novo_nome"
+                placeholder="Editar nome"
+                class="input-edit"
+              >
+              <button type="submit" class="btn-sm">Salvar</button>
+            </form>
+
+            <form
+              action="{{ url_for('routes.excluir_categoria', categoria_id=categoria.id) }}"
+              method="post"
+              class="inline-form"
+              onsubmit="return confirm('Confirmar exclusão?');"
+            >
+              <button type="submit" class="btn-sm">Excluir</button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

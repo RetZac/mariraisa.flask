@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}Pagamento | PagSeguro{% endblock %}
+
+{% block content %}
+<section style="max-width: 600px; margin: 40px auto; padding: 32px; background: #fff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); text-align: center;">
+  <h2>Finalizar Pagamento</h2>
+  <p>Você será redirecionado para o PagSeguro para concluir seu pedido:</p>
+  <p><strong>Pedido #{{ pedido.id }}</strong></p>
+  <p>Total: <strong>R$ {{ '%.2f'|format(pedido.total) }}</strong></p>
+  <a href="{{ checkout_url }}" class="btn" style="margin-top: 24px;">Pagar com PagSeguro</a>
+</section>
+{% endblock %}

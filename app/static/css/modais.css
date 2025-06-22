@@ -1,0 +1,95 @@
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 2000;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.32);
+  justify-content: center;
+  align-items: center;
+}
+.modal-content {
+  background: #fff;
+  margin: 7% auto;
+  padding: 28px 24px 18px 24px;
+  border-radius: 9px;
+  width: 320px;
+  max-width: 97vw;
+  position: relative;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.13);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+.close {
+  color: #888;
+  position: absolute;
+  right: 10px; top: 10px;
+  font-size: 26px;
+  font-weight: bold;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.16s;
+}
+.close:hover {
+  color: #000;
+}
+.modal-content h2 {
+  margin: 0 0 15px 0;
+  font-size: 1.11em;
+  font-weight: 700;
+  color: #111;
+  text-align: left;
+}
+.modal-content label {
+  font-weight: 600;
+  font-size: 0.97rem;
+  color: #222;
+  margin-bottom: 2px;
+}
+.modal-content input {
+  padding: 8px 10px;
+  font-size: 1rem;
+  border: 1.5px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 11px;
+  margin-top: 2px;
+  transition: border-color 0.2s;
+}
+.modal-content input:focus {
+  border-color: #111;
+  outline: none;
+}
+.modal-content button.btn {
+  background: #111;
+  color: #fff;
+  border: none;
+  font-weight: 700;
+  border-radius: 7px;
+  padding: 11px 22px;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: none;
+  outline: none;
+  transition: background 0.16s, color 0.16s;
+  width: 100%;
+}
+.modal-content button.btn:hover {
+  background: #222;
+  color: #fff;
+}
+
+/* ===== RESPONSIVO ===== */
+@media (max-width: 800px) {
+  .products-grid, .featured-products .products-grid { flex-direction: column; align-items: center; gap: 18px; }
+  .product-card { width: 94%; max-width: 300px; }
+  .banner-content { min-width: 220px; padding: 13px 10px; }
+}
+@media (max-width: 540px) {
+  .banner-content h1 { font-size: 1.2rem; }
+  .banner-content h2 { font-size: 1rem; }
+  .banner-content { padding: 8px 2vw; }
+  .footer-container { flex-direction: column; align-items: flex-start; }
+  .site-footer { padding: 20px 3vw; }
+}

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Confirmação de Pedido</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; margin: 0;">
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #f4f4f4;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" border="0" style="background: #ffffff; border-radius: 8px; padding: 24px;">
+          <tr>
+            <td align="left" style="font-size: 20px; color: #28a745; font-weight: bold;">
+              Pedido Confirmado!
+            </td>
+          </tr>
+          <tr>
+            <td style="font-size: 16px; color: #333; padding-top: 14px;">
+              Olá {{ nome_cliente or 'Cliente' }},
+            </td>
+          </tr>
+          <tr>
+            <td style="font-size: 15px; color: #555; padding-top: 6px;">
+              Seu pedido <strong>#{{ pedido.id or '---' }}</strong> foi confirmado com sucesso.
+            </td>
+          </tr>
+          <tr>
+            <td style="padding-top: 20px;">
+              <h3 style="margin-bottom: 10px; color: #222;">Resumo do Pedido:</h3>
+              <ul style="padding-left: 20px; font-size: 14px; color: #444;">
+                {% if itens %}
+                  {% for item in itens %}
+                    <li style="margin-bottom: 6px;">
+                      {{ item.nome_produto or 'Produto' }} –
+                      {{ item.quantidade or 1 }} un –
+                      R$ {{ "%.2f"|format(item.preco_total or 0.0) }}
+                    </li>
+                  {% endfor %}
+                {% else %}
+                  <li>Nenhum item no pedido.</li>
+                {% endif %}
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding-top: 10px; font-size: 15px;">
+              <strong>Total:</strong> R$ {{ "%.2f"|format(total if total is not none else 0.0) }}
+            </td>
+          </tr>
+          <tr>
+            <td style="padding-top: 4px; font-size: 14px;">
+              {% if frete_valor is not none and frete_valor > 0 %}
+                Frete: {{ transportadora or 'Transportadora' }} – R$ {{ "%.2f"|format(frete_valor) }}
+              {% else %}
+                Frete: Gratuito
+              {% endif %}
+            </td>
+          </tr>
+          <tr>
+            <td style="padding-top: 22px; border-top: 1px solid #e0e0e0; font-size: 14px; color: #555;">
+              Obrigado por comprar com a <strong>Maria Raisa</strong>!<br>
+              Qualquer dúvida, entre em contato com nosso atendimento.
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

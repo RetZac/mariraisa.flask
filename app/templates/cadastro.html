@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Cadastro | Maria Raisa{% endblock %}
+
+{% block content %}
+<section class="cadastro-page" style="max-width: 520px; margin: 48px auto; background: #fff; border-radius: 12px; padding: 32px 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+  <h2 style="text-align: center; font-size: 1.5rem; margin-bottom: 20px;">Cadastro de Cliente</h2>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div>
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}" style="margin-bottom: 12px;">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <form action="{{ url_for('routes.cadastro') }}" method="post" novalidate style="display: flex; flex-direction: column; gap: 12px;">
+    <label for="cadastroNome">Nome completo</label>
+    <input id="cadastroNome" name="nome" type="text" placeholder="Seu nome completo" required>
+
+    <label for="cadastroEmail">Email</label>
+    <input id="cadastroEmail" name="email" type="email" placeholder="seu@email.com" required>
+
+    <label for="cadastroSenha">Senha</label>
+    <input id="cadastroSenha" name="senha" type="password" placeholder="Senha segura" required>
+
+    <label for="cadastroCpfCnpj">CPF ou CNPJ</label>
+    <input id="cadastroCpfCnpj" name="cpf_cnpj" type="text" placeholder="CPF ou CNPJ" required>
+
+    <label for="cadastroTelefone">Telefone</label>
+    <input id="cadastroTelefone" name="telefone" type="tel" placeholder="(00) 00000-0000" required>
+
+    <label for="cadastroEndereco">Endereço</label>
+    <input id="cadastroEndereco" name="endereco" type="text" placeholder="Rua, número, complemento">
+
+    <label for="cadastroCidade">Cidade</label>
+    <input id="cadastroCidade" name="cidade" type="text" placeholder="Sua cidade">
+
+    <label for="cadastroEstado">Estado</label>
+    <input id="cadastroEstado" name="estado" type="text" placeholder="Estado">
+
+    <label for="cadastroCep">CEP</label>
+    <input id="cadastroCep" name="cep" type="text" placeholder="CEP">
+
+    <button type="submit" class="btn" style="margin-top: 10px;">Cadastrar</button>
+  </form>
+
+  <p style="text-align: center; margin-top: 24px;">
+    Já tem conta? <a href="{{ url_for('routes.login') }}?modal=login_cliente">Faça login</a>
+  </p>
+</section>
+{% endblock %}

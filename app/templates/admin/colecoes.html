@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %}Coleções | Painel Administrativo{% endblock %}
+
+{% block content %}
+<div class="admin-dashboard-wrapper">
+  <h2 class="titulo-secao" style="text-align:center; margin-bottom: 32px;">Gerenciar Coleções</h2>
+
+  <div style="display: flex; gap: 32px; align-items: flex-start; justify-content: center; flex-wrap: wrap;">
+    <!-- Formulário -->
+    <div style="background: #fff; padding: 24px; border-radius: 12px; width: 360px; box-shadow: 0 0 12px rgba(0,0,0,0.05);">
+      <form action="{{ url_for('routes.adicionar_colecao') }}" method="POST" enctype="multipart/form-data">
+        <h3 style="margin-top: 0;">Nova Coleção</h3>
+
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" required class="form-control" style="width:100%; margin-bottom: 12px;">
+
+        <label for="slug">Slug (ex: colecao-verao):</label>
+        <input type="text" id="slug" name="slug" required class="form-control" style="width:100%; margin-bottom: 12px;">
+
+        <label for="descricao">Descrição:</label>
+        <textarea id="descricao" name="descricao" rows="3" class="form-control" style="width:100%; margin-bottom: 12px;"></textarea>
+
+        <label for="imagem">Imagem de Capa:</label>
+        <input type="file" id="imagem" name="imagem" class="form-control" style="width:100%; margin-bottom: 12px;">
+
+        <label><input type="checkbox" name="ativa"> Ativa</label>
+
+        <button type="submit" class="btn btn-success" style="width:100%; margin-top: 16px;">Salvar Coleção</button>
+      </form>
+    </div>
+
+    <!-- Tabela -->
+    <div style="flex: 1; min-width: 540px;">
+      <table style="width:100%; border-collapse: collapse; background: #fff; border-radius: 12px; overflow: hidden;">
+        <thead style="background: #f0f0f0;">
+          <tr style="text-align: left;">
+            <th style="padding: 12px;">Nome</th>
+            <th style="padding: 12px;">Slug</th>
+            <th style="padding: 12px;">Ativa</th>
+            <th style="padding: 12px;">Produtos</th>
+            <th style="padding: 12px;">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for colecao in colecoes %}
+          <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 12px;">{{ colecao.nome }}</td>
+            <td style="padding: 12px;">{{ colecao.slug }}</td>
+            <td style="padding: 12px;">{{ 'Sim' if colecao.ativa else 'Não' }}</td>
+            <td style="padding: 12px;">{{ colecao.produtos|length }}</td>
+            <td style="padding: 12px;">
+              <a href="{{ url_for('routes.editar_colecao', colecao_id=colecao.id) }}" class="btn btn-sm btn-warning">Editar</a>
+              <form action="{{ url_for('routes.excluir_colecao', colecao_id=colecao.id) }}" method="post" style="display:inline;" onsubmit="return confirm('Deseja realmente excluir esta coleção?');">
+                <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
+              </form>
+            </td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="5" style="padding: 16px; text-align:center;">Nenhuma coleção cadastrada ainda.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

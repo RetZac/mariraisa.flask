@@ -1,0 +1,26 @@
+<!-- Modal Editar Banner -->
+<div id="modalEditBanner" class="modal" style="display:none;">
+  <div class="modal-content" style="max-width:430px;">
+    <button class="close" data-modal="modalEditBanner" aria-label="Fechar">&times;</button>
+    <h2 style="margin-bottom:24px; font-size:1.3rem; font-family:'Montserrat',sans-serif;">Editar Banner</h2>
+    <form id="formEditBanner" action="" method="POST" enctype="multipart/form-data" autocomplete="off">
+      <input type="hidden" name="id" id="edit_banner_id">
+
+      <label for="edit_titulo" style="font-weight:600;">Título</label>
+      <input type="text" name="titulo" id="edit_titulo" required style="margin-bottom:12px;">
+
+      <label for="edit_ordem" style="font-weight:600;">Ordem (número)</label>
+      <input type="number" name="ordem" id="edit_ordem" min="1" required style="margin-bottom:12px;">
+
+      <label for="edit_imagem" style="font-weight:600;">Imagem (Deixe vazio para não alterar)</label>
+      <input type="file" name="imagem" id="edit_imagem" accept="image/*" style="margin-bottom:16px;">
+
+      <label for="edit_ativo" style="font-weight:600;">Ativo?</label>
+      <select name="ativo" id="edit_ativo" required style="margin-bottom:22px;">
+        <option value="1">Sim</option>
+        <option value="0">Não</option>
+      </select>
+      <button type="submit" class="btn" style="width:100%; margin-top:4px;">Salvar Alterações</button>
+    </form>
+  </div>
+</div>

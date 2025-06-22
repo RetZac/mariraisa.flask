@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block title %}Finalizar Pedido | Maria Raisa{% endblock %}
+
+{% block content %}
+<section style="max-width: 800px; margin: 40px auto; background: #fff; border-radius: 12px; padding: 32px; box-shadow: 0 4px 20px rgba(0,0,0,0.06);">
+
+  <h1 style="text-align: center; font-size: 1.8rem; margin-bottom: 28px;">Finalizar Pedido</h1>
+
+  {% if carrinho %}
+    <h2 style="margin-bottom: 16px;">Resumo do Pedido</h2>
+
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px;">
+      <thead>
+        <tr style="border-bottom: 1px solid #ddd;">
+          <th style="text-align: left;">Produto</th>
+          <th>Qtd</th>
+          <th>Subtotal</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in carrinho %}
+        <tr style="border-bottom: 1px solid #f0f0f0;">
+          <td style="display: flex; align-items: center; gap: 10px; padding: 8px 0;">
+            <img src="{{ url_for('static', filename='images/' + item.imagem_produto) }}" width="50" style="border-radius:6px;">
+            <div>
+              <strong>{{ item.nome_produto }}</strong><br>
+              {% if item.cor %}
+              <small>Cor: {{ item.cor }}</small><br>
+              {% endif %}
+            </div>
+          </td>
+          <td style="text-align: center;">{{ item.quantidade }}</td>
+          <td style="text-align: right;">R$ {{ '%.2f'|format(item.preco_total) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    {% set subtotal = carrinho|sum(attribute='preco_total') %}
+    <div style="text-align: right; margin-top: 20px;">
+      <p><strong>Subtotal:</strong> R$ {{ '%.2f'|format(subtotal) }}</p>
+
+      {% if session.frete_valor %}
+        <p><strong>Frete ({{ session.frete_transportadora }}):</strong>
+          R$ {{ '%.2f'|format(session.frete_valor) }} <small>({{ session.frete_prazo }})</small>
+        </p>
+        <p style="font-size: 1.2rem;"><strong>Total com Frete:</strong> R$ {{ '%.2f'|format(subtotal + session.frete_valor) }}</p>
+      {% else %}
+        <p style="font-size: 1.2rem;"><strong>Total:</strong> R$ {{ '%.2f'|format(subtotal) }}</p>
+      {% endif %}
+    </div>
+
+    <hr style="margin: 32px 0; border: none; border-top: 1px solid #ddd;">
+
+    <form method="POST" action="{{ url_for('routes.checkout') }}">
+      <p style="font-weight: 600; margin-bottom: 12px;">Escolha a forma de pagamento:</p>
+
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <label style="display: flex; align-items: center; gap: 10px;">
+          <input type="radio" name="metodo_pagamento" value="pagseguro" required>
+          <span>💳 PagSeguro (Cartão, Boleto)</span>
+        </label>
+
+          <label>
+  <input type="radio" name="metodo_pagamento" value="mercadopago" required>
+  Mercado Pago (Pix, Cartão, Boleto)
+</label>
+
+        <label style="display: flex; align-items: center; gap: 10px;">
+          <input type="radio" name="metodo_pagamento" value="pix" required>
+          <span>🔐 Pix com QR Code</span>
+        </label>
+
+        <label style="display: flex; align-items: center; gap: 10px; opacity: 0.5;">
+          <input type="radio" disabled>
+          <span>📄 Boleto bancário (em breve)</span>
+        </label>
+      </div>
+
+      <button type="submit" style="margin-top: 24px; padding: 14px 24px; background: black; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s;">
+        Finalizar Pedido
+      </button>
+    </form>
+
+  {% else %}
+    <p style="text-align: center;">Seu carrinho está vazio.</p>
+  {% endif %}
+
+</section>
+{% endblock %}

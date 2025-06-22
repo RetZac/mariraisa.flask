@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Destaques - Maria Raisa{% endblock %}
+
+{% block content %}
+<main class="pagina-info">
+  <h1>Destaques</h1>
+  <p>Confira nossos modelos mais vendidos e os lançamentos que estão fazendo sucesso entre nossas clientes lojistas:</p>
+  <ul>
+    <li>Modelos em alta na estação</li>
+    <li>Combos promocionais para primeira compra</li>
+    <li>Estoque limitado com alto giro</li>
+  </ul>
+  <p>🚨 Aproveite enquanto ainda está disponível!</p>
+  <p><a href="{{ url_for('routes.produtos', categoria='destaques') }}" class="btn">Ver Produtos em Destaque</a></p>
+</main>
+{% endblock %}

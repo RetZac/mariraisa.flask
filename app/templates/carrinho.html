@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block title %}Carrinho - Maria Raisa{% endblock %}
+
+{% block content %}
+
+
+  {% if carrinho %}
+  <div class="carrinho-wrapper">
+    <!-- COLUNA DA TABELA -->
+    <div class="carrinho-tabela">
+      <form method="POST" action="{{ url_for('routes.limpar_selecionados') }}">
+        <div class="acoes-topo-tabela">
+          <button type="submit" class="btn-acao">Remover Selecionados</button>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>Produto</th>
+              <th>Cor</th>
+              <th>Quantidade</th>
+              <th>Preço Unitário</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in carrinho %}
+            <tr>
+              <td><input type="checkbox" name="selecionados" value="{{ loop.index0 }}"></td>
+                <td>
+                    <div class="produto-img-cor">
+                        <img src="{{ url_for('static', filename='images/' + item.imagem_produto) }}" class="produto-img">
+                    </div>
+                </td>
+              <td>{{ item.cor or '—' }}</td>
+              <td>{{ item.quantidade }} {{ "caixa" if item.quantidade == 1 else "caixas" }}<br>
+                ({{ item.quantidade * item.pares_por_caixa }} {{ "par" if item.quantidade * item.pares_por_caixa == 1 else "pares" }})
+              </td>
+              <td>R$ {{ '%.2f'|format(item.preco_unitario) }}</td>
+              <td class="valor-total-item">R$ {{ '%.2f'|format(item.preco_total) }}</td>
+              <td>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </form>
+
+      <form method="GET" action="{{ url_for('routes.limpar_carrinho') }}" style="margin-top: 12px;">
+        <button type="submit" class="btn-acao">Limpar Tudo</button>
+      </form>
+    </div>
+
+    <!-- COLUNA DOS CARDS -->
+    <div class="carrinho-linha-inferior">
+      <!-- Calcular Frete -->
+      <div class="card-box">
+        <h3>Calcular Frete:</h3>
+        {% if session.endereco_cliente %}
+        <p style="margin-bottom: 10px;"><strong>Endereço:</strong><br>{{ session.endereco_cliente }}</p>
+        {% endif %}
+        <form method="POST" action="{{ url_for('routes.simular_frete') }}">
+          <input type="text" name="cep" placeholder="Digite seu CEP" required maxlength="9" pattern="\d{5}-?\d{3}">
+          <button type="submit">Calcular</button>
+        </form>
+      </div>
+
+      {% if session.frete_opcoes %}
+      <div class="card-box">
+        <h3>Escolha o frete:</h3>
+        <form method="POST" action="{{ url_for('routes.selecionar_frete') }}">
+          {% for opcao in session.frete_opcoes %}
+          <label style="display:block; margin-bottom:6px;">
+            <input type="radio" name="frete_escolhido" value="{{ loop.index0 }}" required>
+            {{ opcao.transportadora }} – R$ {{ '%.2f' | format(opcao.valor) }} ({{ opcao.prazo }})
+          </label>
+          {% endfor %}
+          <button type="submit">Usar opção</button>
+        </form>
+      </div>
+      {% endif %}
+
+      <!-- Resumo -->
+      <div class="card-box resumo-box">
+        <p><strong>Subtotal:</strong> R$ {{ '%.2f'|format(subtotal or 0) }}</p>
+
+        {% if session.frete_opcoes %}
+          {% if session.frete_valor %}
+            <p><strong>Frete Selecionado:</strong> {{ session.frete_transportadora }} - R$ {{ '%.2f'|format(session.frete_valor) }}</p>
+            <p><strong>Total com Frete:</strong> R$ {{ '%.2f'|format(subtotal + session.frete_valor) }}</p>
+
+            <!-- Pagamentos -->
+            <form method="POST" action="{{ url_for('routes.finalizar_pedido') }}" style="margin-top: 32px;">
+              <input type="hidden" name="metodo_pagamento" value="pix">
+              <button type="submit" class="finalizar-btn">🔐 Pagar com Pix (QR Code)</button>
+            </form>
+
+            <form method="POST" action="{{ url_for('routes.finalizar_pedido') }}">
+              <input type="hidden" name="metodo_pagamento" value="mercadopago">
+              <button type="submit" class="finalizar-btn">🛍️ Pagar com Mercado Pago</button>
+            </form>
+
+          {% else %}
+            <p style="color: #999;">Selecione uma transportadora para calcular o total com frete.</p>
+          {% endif %}
+        {% else %}
+          <p style="color: #999;">Calcule o frete informando seu CEP.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  {% else %}
+<div class="carrinho-container">
+  <div class="carrinho-icon">🛒</div>
+  <h1>Carrinho de Compras</h1>
+  <p>Seu carrinho está vazio no momento.</p>
+  <a href="{{ url_for('routes.produtos') }}" class="btn-voltar">Ver Produtos</a>
+</div>
+  {% endif %}
+</div>
+
+<script>
+  document.querySelector('.finalizar-btn')?.addEventListener('click', function (e) {
+    const freteSelecionado = "{{ session.get('frete_valor') }}";
+    if (!freteSelecionado) {
+      e.preventDefault();
+      alert('Você precisa selecionar uma opção de frete antes de finalizar a compra.');
+    }
+  });
+</script>
+{% endblock %}

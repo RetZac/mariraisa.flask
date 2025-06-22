@@ -1,0 +1,97 @@
+.site-footer {
+  background: #111 !important;     /* Preto elegante no rodapé */
+  color: #fff !important;
+  padding: 40px 10px 20px 10px;
+  border-top: none !important;
+  font-family: 'Montserrat', Arial, sans-serif;
+  margin-top: 40px;
+}
+
+/* Todos os textos e links no rodapé brancos */
+.site-footer * {
+  color: #fff !important;
+}
+
+/* Links do rodapé: branco, hover dourado/caramelo */
+.footer-links ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.footer-links li {
+  margin-bottom: 7px;
+}
+.footer-links a {
+  color: #fff !important;
+  font-size: 14px;
+  text-decoration: none;
+  transition: color 0.18s;
+}
+.footer-links a:hover {
+  color: #e5c07b !important; /* Dourado suave no hover */
+}
+
+/* Ícones sociais: branco, sem filtro preto */
+.footer-social a img {
+  width: 22px;
+  height: 22px;
+  margin-right: 6px;
+  filter: none !important;
+  opacity: 0.98;
+  transition: filter 0.22s;
+}
+.footer-social a:hover img {
+  filter: brightness(1.1) !important;
+}
+
+.footer-contact p {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+/* Copyright: cinza suave sobre o fundo escuro */
+.copyright {
+  text-align: center;
+  color: #e0c9ac !important;
+  font-size: 0.93rem;
+  margin-top: 16px;
+}
+
+/* Remove qualquer fundo branco dos containers internos */
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  background: transparent !important;
+}
+
+.footer-logo-info img { height: 22px; margin-right: 8px; }
+
+@media (max-width: 850px) {
+  .footer-container { flex-direction: column; align-items: flex-start; }
+}
+.footer-sobre {
+  max-width: 980px;
+  margin: 40px auto 20px auto;
+  padding: 0 16px;
+  text-align: center;
+  color: #fff;
+}
+
+.footer-sobre h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #ffffff;
+}
+
+.footer-sobre p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #dddddd;
+  margin-bottom: 10px;
+}

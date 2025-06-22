@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+
+{% block title %}Maria Raisa - Home{% endblock %}
+
+{% block content %}
+{% if banners %}
+<div class="swiper banner-swiper" style="border-radius: 20px; overflow: hidden; margin-bottom:32px;">
+  <div class="swiper-wrapper">
+    {% for banner in banners %}
+    <div class="swiper-slide">
+      <img src="{{ url_for('static', filename='banners/' + banner.imagem) }}" alt="{{ banner.titulo }}" style="width:100%; display:block;">
+      {% if banner.titulo %}
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  <!-- Controles -->
+  <div class="swiper-pagination"></div>
+  <div class="swiper-button-next"></div>
+  <div class="swiper-button-prev"></div>
+</div>
+{% endif %}
+
+
+
+{% if colecao_ano %}
+<section class="colecao-ano">
+  <h2 class="titulo-secao">{{ colecao_ano.nome }}</h2>
+  <div class="slider-container">
+    <button class="slider-btn prev-btn">&#8592;</button>
+    <div class="produtos-slider">
+      {% for produto in produtos_colecao_ano %}
+      <div class="product-card">
+        <a href="{{ url_for('routes.produto_detail', produto_id=produto.id) }}">
+          <img src="{{ url_for('static', filename='images/' ~ produto.imagem_principal) }}" alt="{{ produto.nome }}">
+        </a>
+        <div class="product-info">
+          <h3>{{ produto.nome }}</h3>
+          <p>{{ produto.descricao_curta }}</p>
+          <p class="preco"><strong>R$ {{ '%.2f' | format(produto.preco_par) }}</strong></p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <button class="slider-btn next-btn">&#8594;</button>
+  </div>
+</section>
+{% endif %}
+
+{% for colecao in outras_colecoes %}
+<section class="colecao-outra">
+  <h2 class="titulo-secao">{{ colecao.nome }}</h2>
+  <div class="slider-container">
+    <button class="slider-btn prev-btn">&#8592;</button>
+    <div class="produtos-slider">
+      {% for produto in colecao.produtos %}
+      <div class="product-card">
+        <a href="{{ url_for('routes.produto_detail', produto_id=produto.id) }}">
+          <img src="{{ url_for('static', filename='images/' ~ produto.imagem_principal) }}" alt="{{ produto.nome }}">
+        </a>
+        <div class="product-info">
+          <h3>{{ produto.nome }}</h3>
+          <p>{{ produto.descricao_curta }}</p>
+          <p class="preco"><strong>R$ {{ '%.2f' | format(produto.preco_par) }}</strong></p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <button class="slider-btn next-btn">&#8594;</button>
+  </div>
+</section>
+{% endfor %}
+
+<section class="featured-products">
+  <h2>Produtos em Destaque</h2>
+  {% if produtos_destaque %}
+  <div class="slider-container">
+    <button class="slider-btn prev-btn">&#8592;</button>
+    <div class="produtos-slider">
+      {% for produto in produtos_destaque %}
+      <div class="product-card">
+        <a href="{{ url_for('routes.produto_detail', produto_id=produto.id) }}">
+          <img src="{{ url_for('static', filename='images/' ~ produto.imagem_principal) }}" alt="{{ produto.nome }}">
+        </a>
+        <div class="product-info">
+          <h3>{{ produto.nome }}</h3>
+          <p>{{ produto.descricao_curta }}</p>
+          <p class="preco"><strong>R$ {{ '%.2f' | format(produto.preco_par) }}</strong><span>/ par</span></p>
+          <p style="font-size: 0.95rem; color: #000000;">
+            Total: <strong>R$ {{ '%.2f'|format(produto.preco_par * produto.qtd_minima) }}</strong> ({{ produto.qtd_minima }} pares)
+          </p>
+          <p>Grade: 34 ao 39</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <button class="slider-btn next-btn">&#8594;</button>
+  </div>
+  {% else %}
+  <p>Em breve novos produtos em destaque!</p>
+  {% endif %}
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.slider-container').forEach(container => {
+      const slider = container.querySelector('.produtos-slider');
+      const prevBtn = container.querySelector('.prev-btn');
+      const nextBtn = container.querySelector('.next-btn');
+
+      prevBtn.addEventListener('click', () => {
+        slider.scrollBy({ left: -300, behavior: 'smooth' });
+      });
+
+      nextBtn.addEventListener('click', () => {
+        slider.scrollBy({ left: 300, behavior: 'smooth' });
+      });
+    });
+  });
+</script>
+{% endblock %}

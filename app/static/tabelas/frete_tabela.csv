@@ -1,0 +1,11 @@
+UF,Peso_Mín_kg,Peso_Máx_kg,Transportadora,Valor,Prazo_dias
+SP,0,1,Rodonaves,18.0,2
+SP,1,5,Rodonaves,25.0,3
+SP,0,1,Jadlog,19.0,2
+SP,1,5,Jadlog,28.0,3
+RJ,0,5,Rodonaves,32.0,4
+RJ,0,5,Jadlog,30.0,5
+MG,0,5,Rodonaves,33.0,4
+MG,0,5,Jadlog,35.0,5
+OUTROS,0,10,Rodonaves,45.0,6
+OUTROS,0,10,Jadlog,40.0,6

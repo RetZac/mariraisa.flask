@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}Pagamento via Pix - Pedido #{{ pedido.id }}{% endblock %}
+
+{% block content %}
+<section style="max-width: 700px; margin: 40px auto; padding: 32px; background: #fff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); text-align: center;">
+  <h2 style="font-size: 1.8rem; margin-bottom: 16px;">Pagamento via Pix</h2>
+
+  <p>Pedido <strong>#{{ pedido.id }}</strong> — Total: <strong>R$ {{ "%.2f"|format(pedido.total) }}</strong></p>
+
+  <p style="margin-top: 16px;">Escaneie o QR Code abaixo com seu app bancário:</p>
+  <img src="data:image/png;base64,{{ qr_code_base64 }}" alt="QR Code Pix" style="width: 300px; height: 300px; margin: 20px auto; border: 5px solid #eee; border-radius: 12px;">
+
+  <p>Ou copie a chave Pix abaixo:</p>
+  <div style="background: #f2f2f2; padding: 10px 18px; margin: 10px auto; display: inline-block; border-radius: 6px; font-weight: bold;" id="chavePix">
+    {{ chave_pix }}
+  </div>
+
+  <button onclick="copiarChavePix()" class="btn" style="margin-top: 12px;">Copiar chave Pix</button>
+  <p id="copiadoMsg" style="color: green; display: none; margin-top: 6px;">Chave Pix copiada com sucesso!</p>
+
+  <hr style="margin: 32px auto; width: 60%; border: none; border-top: 1px solid #ddd;">
+
+  <p style="margin-top: 16px;">Ou copie o código Pix abaixo (Pix Copia e Cola):</p>
+  <textarea readonly style="width: 100%; height: 110px; padding: 10px; font-size: 0.9rem; background: #f9f9f9; border-radius: 6px; border: 1px solid #ccc;">
+{{ payload_pix }}
+  </textarea>
+
+  <button onclick="copiarPayload()" class="btn" style="margin-top: 12px;">Copiar código Pix</button>
+  <p id="copiadoPayloadMsg" style="color: green; display: none; margin-top: 6px;">Código Pix copiado com sucesso!</p>
+
+  <div style="margin-top: 32px;">
+    <a href="{{ url_for('routes.pedidos_cliente') }}" class="btn">Voltar para Meus Pedidos</a>
+  </div>
+</section>
+
+<script>
+  function copiarChavePix() {
+    const texto = document.getElementById("chavePix").innerText;
+    navigator.clipboard.writeText(texto).then(function() {
+      document.getElementById("copiadoMsg").style.display = "block";
+      setTimeout(() => {
+        document.getElementById("copiadoMsg").style.display = "none";
+      }, 3000);
+    });
+  }
+
+  function copiarPayload() {
+    const texto = document.querySelector("textarea").value;
+    navigator.clipboard.writeText(texto).then(function() {
+      document.getElementById("copiadoPayloadMsg").style.display = "block";
+      setTimeout(() => {
+        document.getElementById("copiadoPayloadMsg").style.display = "none";
+      }, 3000);
+    });
+  }
+</script>
+{% endblock %}

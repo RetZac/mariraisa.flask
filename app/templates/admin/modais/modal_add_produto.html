@@ -1,0 +1,104 @@
+<!-- modal_add_produto.html -->
+<div id="modalAddProduto" class="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); align-items:center; justify-content:center; z-index:1000;">
+  <div class="modal-content" style="background:#fff; border-radius:12px; padding:24px; max-width:500px; width:100%; position:relative;">
+    <button class="close-btn" type="button" onclick="fecharModalAdd()" aria-label="Fechar" style="position:absolute; top:12px; right:12px; font-size:1.5rem; background:none; border:none; cursor:pointer;">&times;</button>
+    <h2 style="margin-top:0; margin-bottom:16px; font-family:'Montserrat',sans-serif; font-size:1.5rem; font-weight:800; text-align:center;">Cadastrar Novo Produto</h2>
+    <form action="{{ url_for('routes.adicionar_produto') }}" method="post" enctype="multipart/form-data" style="display:flex; flex-direction:column; gap:12px;">
+      <label for="codigoAdd">Código</label>
+      <input type="text" id="codigoAdd" name="codigo" required>
+      <label for="nomeAdd">Nome</label>
+      <input type="text" id="nomeAdd" name="nome" required>
+      <label for="descricaoAdd">Descrição Curta</label>
+      <textarea id="descricaoAdd" name="descricao" rows="2" required></textarea>
+      <label for="descricaoDetalhadaAdd">Descrição Detalhada</label>
+      <textarea id="descricaoDetalhadaAdd" name="descricao_detalhada" rows="4"></textarea>
+
+      <div style="display:flex; gap:12px;">
+        <div style="flex:1;">
+          <label for="precoVistaAdd">Preço à Vista (R$)</label>
+          <input type="number" id="precoVistaAdd" name="preco_par" step="0.01" min="0" required>
+        </div>
+        <div style="flex:1;">
+          <label for="precoParceladoAdd">Preço Parcelado (R$)</label>
+          <input type="number" id="precoParceladoAdd" name="preco_parcelado" step="0.01" min="0" required>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:12px;">
+        <div style="flex:1;">
+          <label for="caixaQtdAdd">Qtd por Caixa</label>
+          <input type="number" id="caixaQtdAdd" name="qtd_minima" min="1" required>
+        </div>
+        <div style="flex:1;">
+          <label for="tamanhosAdd">Tamanhos (ex: 34,35,36)</label>
+          <input type="text" id="tamanhosAdd" name="grade_keys" placeholder="34,35,36" required>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:12px;">
+        <div style="flex:1;">
+          <label for="estoquePorTamanhoAdd">Estoque por Tamanho (ex: 2,3,1)</label>
+          <input type="text" id="estoquePorTamanhoAdd" name="grade_values" placeholder="2,3,1" required>
+        </div>
+        <div style="flex:1;">
+          <label for="categoriaAdd">Categoria</label>
+          <select id="categoriaAdd" name="categoria_id" required>
+            {% for cat in categorias %}
+              <option value="{{ cat.id }}">{{ cat.nome }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+    <label for="tipo_salto">Tipo de Salto:</label>
+<select name="tipo_salto" required class="form-control">
+  <option value="">Selecione</option>
+  <option>Rasteira</option>
+  <option>Salto Mini (1cm)</option>
+  <option>Salto Baixo Fino (5cm)</option>
+  <option>Salto Baixo Bloco (5cm)</option>
+  <option>Salto Médio Fino (6,7cm)</option>
+  <option>Salto Médio Bloco (6,7cm)</option>
+  <option>Salto Alto Fino (8,9cm)</option>
+  <option>Salto Alto Bloco (8,9cm)</option>
+  <option>Sem Salto</option>
+</select>
+
+<div class="form-group">
+<label for="colecao">Coleção:</label>
+<select name="colecao_id" class="form-control">
+  <option value="">Nenhuma</option>
+  {% for colecao in colecoes %}
+    <option value="{{ colecao.id }}"
+      {% if produto and produto.colecao_id == colecao.id %}selected{% endif %}>
+      {{ colecao.nome }}
+    </option>
+  {% endfor %}
+</select>
+
+</div>
+
+
+
+      <!-- Cores com Imagens -->
+      <label>Cores e Imagens:</label>
+      <div id="cores-container">
+        <div class="cor-item" style="display:flex; gap:8px; margin-bottom:8px;">
+          <input type="text" name="cores_nomes[]" placeholder="Nome da Cor" required>
+          <input type="file" name="cores_imagens[]" accept="image/*" required>
+        </div>
+      </div>
+      <button type="button" onclick="adicionarCor()" class="btn btn-sm" style="margin-bottom:12px;">+ Adicionar Cor</button>
+
+      <label for="fotoAdd">Foto Principal</label>
+      <input type="file" id="fotoAdd" name="foto" accept="image/*">
+
+
+      <label for="fotosAdd">Fotos Extras</label>
+      <input type="file" id="fotosAdd" name="fotos" accept="image/*" multiple>
+      <div id="galeriaAddPreview" style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;"></div>
+
+      <button type="submit" class="btn btn-success" style="margin-top:16px; padding:12px; font-weight:700; border-radius:8px;">Salvar Produto</button>
+    </form>
+  </div>
+</div>
